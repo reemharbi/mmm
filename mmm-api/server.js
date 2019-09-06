@@ -15,7 +15,7 @@ const reactPort = 3000;
 // Establish DB connection
 mongoose.connect(db, { useNewUrlParser: true });
 mongoose.connection.once('open', () => {
-    console.log('connected to mongo');
+    console.log('Connected to MongoDB');
 });
 
 // Initiate Express application object
