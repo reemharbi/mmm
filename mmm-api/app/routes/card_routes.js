@@ -53,3 +53,21 @@ router.get('/api/cards/:id', (req, res) => {
     });
 });
 
+/**
+ * Action:      CREATE
+ * Method:      POST
+ * URI:         /api/cards
+ * Description: Create new Card
+ */
+router.post('/api/cards', (req, res) => {
+    Card.create(req.body.card, (error, newCard) => {
+        if (!error) {
+            // On a successful create action, respond with the new card
+            // and 201 HTTP status
+            res.status(201).json({ card: newCard });
+        } else {
+            // if there are any errors
+            res.status(500).json({ error: error });
+        }
+    });
+});
