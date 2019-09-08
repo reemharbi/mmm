@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import RoomsList from './RoomsList'
 import firebase from './firebase';
-import AddRoom from './AddRoom';
+import Header from './LobbyHeader/Header';
 import UserName from './UserName';
 import Game from './Game/Game';
-import RoomFilter from './RoomFilter';
+import RoomFilter from './LobbyHeader/RoomFilter';
 import { Container } from 'semantic-ui-react';
 
 
@@ -140,17 +140,6 @@ export default class Lobby extends Component {
             };
         });
         
-        // this.setState({
-        //     filterContent: e.target.value
-        // })
-
-        // const newList = this.state.rooms.filter(room => {
-        //     return room.roomName.includes(this.state.filterContent)
-        // })
-
-        // this.setState({
-        //     roomsToDisplay: filteredRooms
-        // })
 
     }
 
@@ -167,8 +156,9 @@ export default class Lobby extends Component {
         } else if (this.state.currentComponent === 'room') {
             return (
                 <Container center>
-                    <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
-                    <RoomFilter onChange={this.roomsFilter} val={this.state.filterContent}/>
+                    <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom}  onChangeFilter={this.roomsFilter} val={this.state.filterContent}/>
+                    {/* <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
+                    <RoomFilter onChange={this.roomsFilter} val={this.state.filterContent}/> */}
                     <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
                     </Container>
             )
