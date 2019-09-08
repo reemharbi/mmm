@@ -14,7 +14,7 @@ const router = express.Router();
  * Description: Get all rooms
  */
 router.get('/api/rooms', (req, res) => {
-    Room.find({}, (error, rooms) => {
+    Room.find({}).populate("players").exec((error, rooms) => {
         // Return all rooms
         if (!error) {
             res.status(200).json({ rooms: rooms });
@@ -32,7 +32,7 @@ router.get('/api/rooms', (req, res) => {
  * Description: Get a room by room ID
  */
 router.get('/api/rooms/:id', (req, res) => {
-    Room.findById(req.params.id, (error, room) => {
+    Room.findById(req.params.id).populate().exec((error, room) => {
         if (!error) {
             if (room) {
                 // Return the room
