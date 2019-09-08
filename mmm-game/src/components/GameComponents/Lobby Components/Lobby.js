@@ -4,8 +4,8 @@ import firebase from './firebase';
 import Header from './LobbyHeader/Header';
 import UserName from './UserName';
 import Game from './Game/Game';
-import RoomFilter from './LobbyHeader/RoomFilter';
 import { Container } from 'semantic-ui-react';
+import {getAllPlayers, getPlayer ,createPlayer ,deletePlayer, getAllRooms, getRoom ,createRoom ,deleteRoom} from './api'
 
 
 
@@ -24,6 +24,7 @@ export default class Lobby extends Component {
         rooms: [],
         roomsToDisplay: [],
         roomName: "",
+        user: null,
         userName: '',
         currentComponent: 'user' ,//this is initially setting the current component to username
         role: true,
@@ -32,30 +33,31 @@ export default class Lobby extends Component {
     }
 
 
-    componentWillMount() {
-        const roomsRef = firebase.database().ref('rooms');
-        roomsRef.on('value', snapshot => {
-            const roomsState = snapshot.val();
+    getAllRoomsAPI = () => {
+        getAllRooms().then(res => {
 
-
-            let roomsStateArray = [];
-            for (let room in roomsState) {
-                roomsStateArray.push({
-                    roomName: roomsState[room].name,
-                    playerCount: roomsState[room].playerCount
-                })
-            }
-            console.log("i am the 'componentWi.....'")
-
+            const roomsStateArray = res.data.rooms;
             this.setState({
                 rooms: roomsStateArray,
                 roomsToDisplay: roomsStateArray
 
             }
             )
-
-
         })
+    }
+
+    componentWillMount() {
+       
+
+
+            this.getAllRoomsAPI();
+
+            
+            console.log("i am the 'componentWi.....'")
+
+
+
+        
 
         console.log(this.state.rooms)
 
@@ -68,9 +70,17 @@ export default class Lobby extends Component {
 
 
         value.preventDefault();
-        const roomsRef = firebase.database().ref('rooms');
-        const newRoom = { name: this.state.roomName, playerCount: 0 }
-        roomsRef.push(newRoom);
+
+
+        const newRoom = {
+            name: this.state.roomName,
+            players: [{"_id": this.state.user._id}]
+
+        }
+
+        createRoom(newRoom).then(res => {
+            this.getAllRoomsAPI();
+        })
 
         this.setState({
             roomName: ""
@@ -81,9 +91,9 @@ export default class Lobby extends Component {
     initUser = (value) => {
         value.preventDefault();
 
-        const playerRef = firebase.database().ref('players');
-        const newUser = { name: this.state.userName }
-        playerRef.push(newUser);
+        const newPlayer = {name: this.state.userName}
+
+        createPlayer(newPlayer).then(res => this.setState({ user: res.data.player}))
 
 
         // changing currentComponent to the room component
@@ -96,6 +106,7 @@ export default class Lobby extends Component {
 
     userNameHandler = (e) => {
         this.setState({
+            
             userName: e.target.value
         })
         console.log('*', this.state.userName)
@@ -132,7 +143,7 @@ export default class Lobby extends Component {
         
         this.setState((prevState, props) => {
             const filteredRooms = prevState.rooms.filter(room => {
-                return room.roomName.toLowerCase().includes(newFilterValue.toLowerCase());
+                return room.name.toLowerCase().includes(newFilterValue.toLowerCase());
             });
             return {
                 filterContent: newFilterValue,
@@ -146,7 +157,7 @@ export default class Lobby extends Component {
 
 
     render() {
-
+        console.log(this.state.user)
         console.log(this.state.rooms)
         // now we're checking which component to display based on currentComponent from state
         if (this.state.currentComponent === 'user') {

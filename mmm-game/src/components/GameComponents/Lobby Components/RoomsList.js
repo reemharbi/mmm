@@ -17,7 +17,7 @@ export default class RoomsList extends Component {
 
 
         const roomsList = this.props.rooms.map((room , index) => {
-          return <Grid.Column><Room enterRoom={this.props.enterRoom} name= {room.roomName} playerCount={room.playerCount} players= {room.players} key={index} /></Grid.Column>
+          return <Grid.Column><Room enterRoom={this.props.enterRoom} name= {room.name} limit={room.limit} playerCount= {room.players.length} key={index} /></Grid.Column>
         })
 
         return (
