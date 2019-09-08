@@ -6,6 +6,7 @@ const cors = require('cors');
 // Require route files
 const cardRoutes = require('./app/routes/card_routes');
 const playerRoutes = require('./app/routes/player_router');
+const roomRoutes = require('./app/routes/room_routers');
 
 // Require DB configuration file
 const db = require('./config/db');
@@ -44,6 +45,7 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${reactPor
 // Mount imported Routers
 app.use(cardRoutes);
 app.use(playerRoutes);
+app.use(roomRoutes);
 
 // Run API on designated port
 app.listen(port, () => {

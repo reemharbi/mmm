@@ -1,13 +1,14 @@
 // Require necessary NPM Packages
 const mongoose = require('mongoose');
 
+const Schema = mongoose.Schema;
 // Define Room Schema
 const roomSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    ingredients: [{
+    players: [{
         type: Schema.Types.ObjectId,
         ref: 'Player'
     }],
