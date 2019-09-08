@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-export default class InvestorView extends Component {
+
+export default class Card extends Component {
     render() {
         return (
             <div>
+                {this.props.name}
             </div>
         )
     }
