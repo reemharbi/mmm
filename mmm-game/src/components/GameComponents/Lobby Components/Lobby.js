@@ -9,7 +9,7 @@ import UserName from './UserName';
 export default class Lobby extends Component {
 
 
-    constructor (props){
+    constructor(props) {
         super(props);
         this.userNameHandler = this.userNameHandler.bind(this)
     }
@@ -21,18 +21,18 @@ export default class Lobby extends Component {
         roomsToDisplay: [],
         roomName: "",
         userName: '',
-        currentComponent: null
+        currentComponent: 'user' //this is initially setting the current component to username
     }
 
 
-    componentWillMount(){
+    componentWillMount() {
         const roomsRef = firebase.database().ref('rooms');
-        roomsRef.on('value' , snapshot => {
+        roomsRef.on('value', snapshot => {
             const roomsState = snapshot.val();
 
 
             let roomsStateArray = [];
-            for(let room in roomsState){
+            for (let room in roomsState) {
                 roomsStateArray.push({
                     roomName: roomsState[room].name,
                     playerCount: roomsState[room].playerCount
@@ -43,28 +43,24 @@ export default class Lobby extends Component {
             this.setState({
                 rooms: roomsStateArray,
                 roomsToDisplay: roomsStateArray
-                
-            }
-                ) 
 
-                this.setState({
-                    currentComponent: <div>
-                        <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
-                </div>
-                })
+            }
+            )
+
+
         })
 
     }
 
 
 
-// A function to handle the room adding functionality
+    // A function to handle the room adding functionality
     addRoom = (value) => {
 
 
         value.preventDefault();
         const roomsRef = firebase.database().ref('rooms');
-        const newRoom = {name: this.state.roomName, playerCount: 0}
+        const newRoom = { name: this.state.roomName, playerCount: 0 }
         roomsRef.push(newRoom);
 
         this.setState({
@@ -76,11 +72,9 @@ export default class Lobby extends Component {
     initUser = (value) => {
         value.preventDefault();
 
+        // changing currentComponent to the room component
         this.setState({
-            currentComponent: <div>
-            <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom}/>
-            <RoomsList rooms={this.state.rooms} />
-        </div>
+            currentComponent: 'room'
         })
         console.log('change the component...')
 
@@ -90,11 +84,11 @@ export default class Lobby extends Component {
         this.setState({
             userName: e.target.value
         })
-        console.log(this.state.userName)
+        console.log('*', this.state.userName)
     }
 
-    
-// The function that changes the state to allow the user to type in the text field.
+
+    // The function that changes the state to allow the user to type in the text field.
     onChangeHandler = (e) => {
         this.setState({
             roomName: e.target.value
@@ -103,17 +97,23 @@ export default class Lobby extends Component {
     }
 
     render() {
-        return (
-            // <div>
-            //     <UserName userName={this.state.userName} initUser={this.initUser} onChange={this.userNameHandler}/>
-            // </div>
-            <div>
-                {this.state.currentComponent}
-            </div>
-        //     <div>
-        //     <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom}/>
-        //     <RoomsList rooms={this.state.rooms} />
-        // </div>
-        )
+
+        // now we're checking which component to display based on currentComponent from state
+        if (this.state.currentComponent === 'user') {
+            return (<div>
+                <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
+            </div>)
+        } else if (this.state.currentComponent === 'room') {
+            return (
+                <div>
+                    <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
+                    <RoomsList rooms={this.state.rooms} />
+                </div>
+            )
+        } else {
+            return (
+                <div>loading</div>
+            )
+        }
     }
 }
