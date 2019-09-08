@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 // Require route files
+const cardRoutes = require('./app/routes/card_routes');
 
 // Require DB configuration file
 const db = require('./config/db');
@@ -40,6 +41,8 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${reactPor
 
 /*** Routes ***/
 // Mount imported Routers
+app.use(cardRoutes);
+
 
 // Run API on designated port
 app.listen(port, () => {

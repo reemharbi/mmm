@@ -13,7 +13,7 @@ const router = express.Router();
  * URI:         /api/cards
  * Description: Get all Cards
  */
-router.get('/api/articles', (req, res) => {
+router.get('/api/cards', (req, res) => {
     Card.find({}, (error, cards) => {
         // Return all cards
         if (!error) {
@@ -60,7 +60,7 @@ router.get('/api/cards/:id', (req, res) => {
  * Description: Create new Card
  */
 router.post('/api/cards', (req, res) => {
-    Card.create(req.body.card, (error, newCard) => {
+    Card.create(req.body, (error, newCard) => {
         if (!error) {
             // On a successful create action, respond with the new card
             // and 201 HTTP status
@@ -71,3 +71,67 @@ router.post('/api/cards', (req, res) => {
         }
     });
 });
+
+/**
+ * Action:      UPDATE
+ * Method:      PATCH
+ * URI:         /api/cards/:id
+ * Description: Update a Card by Card ID
+ */
+router.patch('/api/cards/:id', (req, res) => {
+    Card.findById(req.params.id, (error, card) => {
+        if (!error) {
+            if (card) {
+                card.update(req.body, (error, card) => {
+                    if (!error) {
+                        res.status(204).end();
+                    } else {
+                        res.status(500).json({ error: error });
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    error: {
+                        name: 'DocumentNotFoundError',
+                        message: 'The provided Id doesn\'t match any documents'
+                    }
+                });
+            }
+        } else {
+            res.status(500).json({ error: error })
+        }
+    });
+});
+
+/**
+ * Action:      DESTROY
+ * Method:      DELETE
+ * URI:         /api/cards/:id
+ * Description: Delete a Card by Card ID
+ */
+router.delete('/api/cards/:id', (req, res) => {
+    Card.findById(req.params.id, (error, card) => {
+        if (!error) {
+            if (card) {
+                card.remove((error, card) => {
+                    if (!error) {
+                        res.status(204).end();
+                    } else {
+                        res.status(500).json({ error: error });
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    error: {
+                        name: 'DocumentNotFoundError',
+                        message: 'The provided Id doesn\'t match any documents'
+                    }
+                });
+            }
+        } else {
+            res.status(500).json({ error: error })
+        }
+    });
+});
+
+module.exports = router;
