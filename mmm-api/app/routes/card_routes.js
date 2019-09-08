@@ -44,7 +44,7 @@ router.get('/api/cards/:id', (req, res) => {
                         name: 'DocumentNotFoundError',
                         message: 'The provided Id doesn\'t match any documents'
                     }
-                })
+                });
             }
         } else {
             //if there are any errors

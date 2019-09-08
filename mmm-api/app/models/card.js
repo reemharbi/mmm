@@ -18,5 +18,4 @@ const cardSchema = new mongoose.Schema({
 // Compile model based on the schema
 const Card = mongoose.model('Card', cardSchema);
 
-// Export the model
 module.exports = Card;
