@@ -1,20 +1,26 @@
 import React, { Component } from 'react'
-import {Button , Form} from 'react-bootstrap'
+import { Button, Form, Container } from 'semantic-ui-react'
+
 
 export default class AddRoom extends Component {
     render() {
         return (
-            <div>
-                <Form>
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label> Room Name: </Form.Label>
-                        <Form.Control value={this.props.roomName} type="text" placeholder="Name" onChange={(e) => this.props.onChange(e)} />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" onClick={ (e) => this.props.addRoom(e)}>
-                        Submit
-                    </Button>
-                </Form>
-            </div>
+            <Container center>
+
+
+
+
+
+<Form unstackable>
+    <Form.Group widths={2}>
+      <Form.Input label='Create a room' placeholder='Room Name' value={this.props.roomName} onChange={(e) => this.props.onChange(e)} />
+    </Form.Group>
+    <Button type='submit' onClick={ (e) => this.props.addRoom(e)}>Submit</Button>
+  </Form>
+
+
+                
+  </Container>
         )
     }
 }

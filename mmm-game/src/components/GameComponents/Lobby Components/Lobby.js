@@ -3,6 +3,10 @@ import RoomsList from './RoomsList'
 import firebase from './firebase';
 import AddRoom from './AddRoom';
 import UserName from './UserName';
+import Game from './Game/Game';
+import RoomFilter from './RoomFilter';
+import { Container } from 'semantic-ui-react';
+
 
 
 
@@ -21,7 +25,10 @@ export default class Lobby extends Component {
         roomsToDisplay: [],
         roomName: "",
         userName: '',
-        currentComponent: 'user' //this is initially setting the current component to username
+        currentComponent: 'user' ,//this is initially setting the current component to username
+        role: true,
+        filterContent: ""
+
     }
 
 
@@ -50,6 +57,8 @@ export default class Lobby extends Component {
 
         })
 
+        console.log(this.state.rooms)
+
     }
 
 
@@ -71,6 +80,11 @@ export default class Lobby extends Component {
 
     initUser = (value) => {
         value.preventDefault();
+
+        const playerRef = firebase.database().ref('players');
+        const newUser = { name: this.state.userName }
+        playerRef.push(newUser);
+
 
         // changing currentComponent to the room component
         this.setState({
@@ -96,8 +110,55 @@ export default class Lobby extends Component {
         console.log(this.state.roomName);
     }
 
+    //Changes the component to enter a room
+    enterRoom = () => {
+        this.setState({
+            currentComponent: 'game'
+
+        })
+    }
+
+
+
+    exitGame = () => {
+
+        this.setState({
+            currentComponent: 'room'
+        })
+    }
+
+    roomsFilter = (e) => {
+      const  newFilterValue = e.target.value;
+        
+        this.setState((prevState, props) => {
+            const filteredRooms = prevState.rooms.filter(room => {
+                return room.roomName.toLowerCase().includes(newFilterValue.toLowerCase());
+            });
+            return {
+                filterContent: newFilterValue,
+                roomsToDisplay: filteredRooms
+            };
+        });
+        
+        // this.setState({
+        //     filterContent: e.target.value
+        // })
+
+        // const newList = this.state.rooms.filter(room => {
+        //     return room.roomName.includes(this.state.filterContent)
+        // })
+
+        // this.setState({
+        //     roomsToDisplay: filteredRooms
+        // })
+
+    }
+
+
+
     render() {
 
+        console.log(this.state.rooms)
         // now we're checking which component to display based on currentComponent from state
         if (this.state.currentComponent === 'user') {
             return (<div>
@@ -105,15 +166,35 @@ export default class Lobby extends Component {
             </div>)
         } else if (this.state.currentComponent === 'room') {
             return (
-                <div>
+                <Container center>
                     <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
-                    <RoomsList rooms={this.state.rooms} />
-                </div>
+                    <RoomFilter onChange={this.roomsFilter} val={this.state.filterContent}/>
+                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+                    </Container>
             )
-        } else {
+        } 
+        
+        else if (this.state.currentComponent === 'game'){
+
+           return( <div>
+                <Game role={this.state.role} exitGame= {this.exitGame}/>
+            </div>
+           )
+        }
+        
+        
+        
+        
+        
+        else {
             return (
                 <div>loading</div>
             )
         }
+
+
+
+
+
     }
 }
