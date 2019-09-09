@@ -84,17 +84,12 @@ export default class Lobby extends Component {
         createRoom(newRoom).then(res => {
             this.setState({
                 currentRoom: res.data.room,
-                currentComponent: "game"
+                currentComponent: "game",
+                roomName: ""
             })
             console.log(res.data.room._id)
             this.socket.emit("createNewRoom" , res.data.room._id )
             this.getAllRoomsAPI();
-            this.socket.emit("createNewRoom",res.data.room._id);
-            this.setState({
-                roomName: "",
-                currentRoom: createdRoom,
-                currentComponent: "game"
-            });
 
         })
 
@@ -141,6 +136,7 @@ export default class Lobby extends Component {
     //Changes the component to enter a room
     enterRoom = (roomID) => {
         console.log('room ID', roomID);
+        this.socket.emit("joinRoom" , {roomID: roomID, userID: this.state.user._id});
 
         let joinedRoom = null;
         getRoom(roomID).then(res => {
