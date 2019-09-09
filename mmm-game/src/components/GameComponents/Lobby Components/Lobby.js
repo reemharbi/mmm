@@ -5,9 +5,9 @@ import Header from './LobbyHeader/Header';
 import UserName from './UserName';
 import Game from './Game/Game';
 import { Container } from 'semantic-ui-react';
-import {getAllPlayers, getPlayer ,createPlayer ,deletePlayer, getAllRooms, getRoom ,createRoom ,deleteRoom} from './api'
-
-
+import { getAllPlayers, getPlayer, createPlayer, deletePlayer, getAllRooms, getRoom, createRoom, deleteRoom } from './api'
+import socketIOClient from "socket.io-client";
+import endpoint from '../../../socket';
 
 
 export default class Lobby extends Component {
@@ -16,6 +16,8 @@ export default class Lobby extends Component {
     constructor(props) {
         super(props);
         this.userNameHandler = this.userNameHandler.bind(this)
+        this.socket = null;
+
     }
 
 
@@ -26,7 +28,7 @@ export default class Lobby extends Component {
         roomName: "",
         user: null,
         userName: '',
-        currentComponent: 'user' ,//this is initially setting the current component to username
+        currentComponent: 'user',//this is initially setting the current component to username
         role: true,
         filterContent: ""
 
@@ -47,17 +49,17 @@ export default class Lobby extends Component {
     }
 
     componentWillMount() {
-       
-
-
-            this.getAllRoomsAPI();
-
-            
-            console.log("i am the 'componentWi.....'")
 
 
 
-        
+        this.getAllRoomsAPI();
+
+
+        console.log("i am the 'componentWi.....'")
+
+
+
+
 
         console.log(this.state.rooms)
 
@@ -74,7 +76,7 @@ export default class Lobby extends Component {
 
         const newRoom = {
             name: this.state.roomName,
-            players: [{"_id": this.state.user._id}]
+            players: [{ "_id": this.state.user._id }]
 
         }
 
@@ -91,22 +93,27 @@ export default class Lobby extends Component {
     initUser = (value) => {
         value.preventDefault();
 
-        const newPlayer = {name: this.state.userName}
+        const newPlayer = { name: this.state.userName }
 
-        createPlayer(newPlayer).then(res => this.setState({ user: res.data.player}))
+        createPlayer(newPlayer).then(res => {
+            this.setState({ user: res.data.player });
+            console.log(this.state.user._id);
+            this.socket = socketIOClient(endpoint,{query:  `userId=${this.state.user._id}`});
+
+        });
 
 
         // changing currentComponent to the room component
         this.setState({
             currentComponent: 'room'
-        })
+        });
         console.log('change the component...')
 
     }
 
     userNameHandler = (e) => {
         this.setState({
-            
+
             userName: e.target.value
         })
         console.log('*', this.state.userName)
@@ -139,8 +146,8 @@ export default class Lobby extends Component {
     }
 
     roomsFilter = (e) => {
-      const  newFilterValue = e.target.value;
-        
+        const newFilterValue = e.target.value;
+
         this.setState((prevState, props) => {
             const filteredRooms = prevState.rooms.filter(room => {
                 return room.name.toLowerCase().includes(newFilterValue.toLowerCase());
@@ -150,7 +157,7 @@ export default class Lobby extends Component {
                 roomsToDisplay: filteredRooms
             };
         });
-        
+
 
     }
 
@@ -167,26 +174,26 @@ export default class Lobby extends Component {
         } else if (this.state.currentComponent === 'room') {
             return (
                 <Container center>
-                    <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom}  onChangeFilter={this.roomsFilter} val={this.state.filterContent}/>
+                    <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
                     {/* <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
                     <RoomFilter onChange={this.roomsFilter} val={this.state.filterContent}/> */}
                     <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
-                    </Container>
+                </Container>
             )
-        } 
-        
-        else if (this.state.currentComponent === 'game'){
-
-           return( <div>
-                <Game role={this.state.role} exitGame= {this.exitGame}/>
-            </div>
-           )
         }
-        
-        
-        
-        
-        
+
+        else if (this.state.currentComponent === 'game') {
+
+            return (<div>
+                <Game role={this.state.role} exitGame={this.exitGame} />
+            </div>
+            )
+        }
+
+
+
+
+
         else {
             return (
                 <div>loading</div>
