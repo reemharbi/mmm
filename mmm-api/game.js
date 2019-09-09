@@ -26,8 +26,9 @@ exports.initGame = (sio, socket) => {
     // This Function called when player successfully create new room  
     createNewRoom = (roomId) => {
         console.log(this);
+        console.log("room id: ",roomId);
         // Join the Room with the same name 
-        this.join(roomId.toString());
+        gameSocket.join(roomId.toString());
 
     }
     gameSocket.on("disconnect", playerDisconnect);
