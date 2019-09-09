@@ -4,11 +4,11 @@ import firebase from './firebase';
 import Header from './LobbyHeader/Header';
 import UserName from './UserName';
 import Game from './Game/Game';
-import { Container } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 import { getAllPlayers, getPlayer, createPlayer, deletePlayer, getAllRooms, getRoom, createRoom, deleteRoom } from './api'
 import socketIOClient from "socket.io-client";
 import endpoint from '../../../socket';
-
+import './Lobby.css';
 
 export default class Lobby extends Component {
 
@@ -164,7 +164,8 @@ export default class Lobby extends Component {
 
 
     render() {
-        console.log(this.state.user)
+        const username = this.state.user && this.state.user.name
+        console.log(this.state.user && this.state.user.name)
         console.log(this.state.rooms)
         // now we're checking which component to display based on currentComponent from state
         if (this.state.currentComponent === 'user') {
@@ -174,9 +175,8 @@ export default class Lobby extends Component {
         } else if (this.state.currentComponent === 'room') {
             return (
                 <Container center>
+                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
                     <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-                    {/* <AddRoom roomName={this.state.roomName} onChange={this.onChangeHandler} addRoom={this.addRoom} />
-                    <RoomFilter onChange={this.roomsFilter} val={this.state.filterContent}/> */}
                     <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
                 </Container>
             )

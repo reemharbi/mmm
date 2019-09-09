@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card } from 'semantic-ui-react'
 
 export default class Room extends Component {
     render() {
@@ -18,7 +18,7 @@ export default class Room extends Component {
       </Card.Content>
       <Card.Content extra>
         <div className='ui two buttons'>
-          <Button basic color='green' onClick={this.props.enterRoom}>
+          <Button color='blue' onClick={this.props.enterRoom}>
             Join
           </Button>
         
