@@ -30,7 +30,8 @@ export default class Lobby extends Component {
         userName: '',
         currentComponent: 'user',//this is initially setting the current component to username
         role: true,
-        filterContent: ""
+        filterContent: "",
+        currentRoom: null
 
     }
 
@@ -80,12 +81,16 @@ export default class Lobby extends Component {
 
         }
 
+        let createdRoom = null;
         createRoom(newRoom).then(res => {
+            createdRoom = res.data.room;
             this.getAllRoomsAPI();
         })
 
         this.setState({
-            roomName: ""
+            roomName: "",
+            currentRoom: createdRoom,
+            currentComponent: "game"
         })
 
     }
@@ -129,9 +134,19 @@ export default class Lobby extends Component {
     }
 
     //Changes the component to enter a room
-    enterRoom = () => {
+    enterRoom = (roomID) => {
+        console.log('room ID',roomID);
+        
+        let joinedRoom = null;
+        getRoom(roomID).then(res => {
+            joinedRoom = res.data.room;
+            console.log('www.',joinedRoom,'.com')
+        }).catch(err => {
+            console.log(err)
+        });
         this.setState({
-            currentComponent: 'game'
+            currentComponent: 'game',
+            currentRoom: joinedRoom
 
         })
     }
@@ -141,8 +156,10 @@ export default class Lobby extends Component {
     exitGame = () => {
 
         this.setState({
-            currentComponent: 'room'
+            currentComponent: 'room',
+            currentRoom: null
         })
+        console.log("hi, i'm exitRoom..nice to meet you" , this.state.currentRoom)
     }
 
     roomsFilter = (e) => {

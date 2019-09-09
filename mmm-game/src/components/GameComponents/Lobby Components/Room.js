@@ -18,7 +18,7 @@ export default class Room extends Component {
       </Card.Content>
       <Card.Content extra>
         <div className='ui two buttons'>
-          <Button color='blue' onClick={this.props.enterRoom}>
+          <Button basic color='blue' onClick={() => this.props.enterRoom(this.props.roomID)}>
             Join
           </Button>
         
