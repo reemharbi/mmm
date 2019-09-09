@@ -81,9 +81,11 @@ export default class Lobby extends Component {
 
         }
 
-        let createdRoom = null;
         createRoom(newRoom).then(res => {
-            createdRoom = res.data.room;
+            this.setState({
+                currentRoom: res.data.room,
+                currentComponent: "game"
+            })
             this.getAllRoomsAPI();
             this.socket.emit("createNewRoom",res.data.room._id);
             this.setState({
