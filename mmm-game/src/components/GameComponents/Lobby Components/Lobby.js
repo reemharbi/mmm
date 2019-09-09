@@ -6,7 +6,7 @@ import UserName from './UserName';
 import Game from './Game/Game';
 import { Container } from 'semantic-ui-react';
 import {getAllPlayers, getPlayer ,createPlayer ,deletePlayer, getAllRooms, getRoom ,createRoom ,deleteRoom} from './api'
-
+import socket from '../../../socket';
 
 
 

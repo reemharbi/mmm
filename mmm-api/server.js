@@ -2,6 +2,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const http = require("http");
+const socketIO = require("socket.io");
 
 // Require route files
 const cardRoutes = require('./app/routes/card_routes');
@@ -23,6 +25,15 @@ mongoose.connection.once('open', () => {
 
 // Initiate Express application object
 const app = express();
+// Server instance
+const server = http.createServer(app);
+// Create Socket using the server instance
+const io = socketIO(server);
+
+// Socket
+io.on("connection", socket => {
+    console.log("User is connected");
+});
 
 // Define port for API to run on
 const port = process.env.PORT || expressPort;
@@ -48,6 +59,6 @@ app.use(playerRoutes);
 app.use(roomRoutes);
 
 // Run API on designated port
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App is listening at port ${port}`);
 });
