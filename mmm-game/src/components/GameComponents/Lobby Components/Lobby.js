@@ -87,10 +87,13 @@ export default class Lobby extends Component {
                 currentComponent: "game"
             })
             this.getAllRoomsAPI();
-        })
+            this.socket.emit("createNewRoom",res.data.room._id);
+            this.setState({
+                roomName: "",
+                currentRoom: createdRoom,
+                currentComponent: "game"
+            });
 
-        this.setState({
-            roomName: ""
         })
 
     }
@@ -103,7 +106,7 @@ export default class Lobby extends Component {
         createPlayer(newPlayer).then(res => {
             this.setState({ user: res.data.player });
             console.log(this.state.user._id);
-            this.socket = socketIOClient(endpoint,{query:  `userId=${this.state.user._id}`});
+            this.socket = socketIOClient(endpoint, { query: `userId=${this.state.user._id}` });
 
         });
 
@@ -135,12 +138,11 @@ export default class Lobby extends Component {
 
     //Changes the component to enter a room
     enterRoom = (roomID) => {
-        console.log('room ID',roomID);
-        
+        console.log('room ID', roomID);
+
         let joinedRoom = null;
         getRoom(roomID).then(res => {
             joinedRoom = res.data.room;
-            console.log('www.',joinedRoom,'.com')
         }).catch(err => {
             console.log(err)
         });
@@ -159,7 +161,7 @@ export default class Lobby extends Component {
             currentComponent: 'room',
             currentRoom: null
         })
-        console.log("hi, i'm exitRoom..nice to meet you" , this.state.currentRoom)
+        console.log("hi, i'm exitRoom..nice to meet you", this.state.currentRoom)
     }
 
     roomsFilter = (e) => {
@@ -192,7 +194,7 @@ export default class Lobby extends Component {
         } else if (this.state.currentComponent === 'room') {
             return (
                 <Container center>
-                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
+                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold' }} verticalAlign='middle'>Welcome {username}! </Grid>
                     <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
                     <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
                 </Container>
