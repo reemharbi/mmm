@@ -20,7 +20,6 @@ export default class Game extends Component {
                     cardsState[i].name
                 )
             }
-            console.log("i am the 'componentWi.....'")
 
             this.setState({
                 cards: cardsStateArray

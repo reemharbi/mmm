@@ -12,7 +12,7 @@ export default class RoomFilter extends Component {
 
 <Form unstackable>
     <Form.Group widths={2}>
-      <Form.Input label='Search a room' placeholder='Room Name' value={this.props.val} onChange={(e) => this.props.onChange(e)} />
+      <Form.Input placeholder='Search a room' value={this.props.val} onChange={(e) => this.props.onChange(e)} />
     </Form.Group>
   </Form>
 
