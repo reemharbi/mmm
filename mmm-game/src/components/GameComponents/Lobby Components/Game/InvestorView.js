@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { Button, Card } from 'semantic-ui-react'
+import './InvestorView.css'
+
 export default class InvestorView extends Component {
 
     constructor(props){
@@ -8,14 +11,13 @@ export default class InvestorView extends Component {
         }
     }
     render() {
-
         console.log(this.props.cards[0])
         return (
             <div>
-               
+               <Card>
                <p>{this.props.cards[0]}</p>
-
-                <button onClick={this.props.exitGame}> EXIT GAME</button>
+                </Card>
+                <Button onClick={this.props.exitGame}> EXIT GAME</Button>
             </div>
         )
     }

@@ -13,9 +13,9 @@ export default class AddRoom extends Component {
 
 <Form unstackable>
     <Form.Group widths={2}>
-      <Form.Input label='Create a room' placeholder='Room Name' value={this.props.roomName} onChange={(e) => this.props.onChange(e)} />
+      <Form.Input placeholder='Create a room' value={this.props.roomName} onChange={(e) => this.props.onChange(e)} />
     </Form.Group>
-    <Button type='submit' onClick={ (e) => this.props.addRoom(e)}>Submit</Button>
+    <Button type='submit' color='blue' onClick={ (e) => this.props.addRoom(e)}>Create</Button>
   </Form>
 
 
