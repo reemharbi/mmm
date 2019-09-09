@@ -98,7 +98,7 @@ export default class Lobby extends Component {
         createPlayer(newPlayer).then(res => {
             this.setState({ user: res.data.player });
             console.log(this.state.user._id);
-            this.socket = socketIOClient(endpoint,{query:  `userId=${this.state.user._id}`});
+            this.socket = socketIOClient(endpoint, { query: `userId=${this.state.user._id}` });
 
         });
 

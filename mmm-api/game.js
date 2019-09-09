@@ -6,14 +6,15 @@ const Player = require('./app/models/player');
 
 
 
-//  Function Called when Player is created
+//   This Function is Called when a Player is created
 exports.initGame = (sio, socket) => {
     const io = sio;
     const gameSocket = socket;
     const userId = gameSocket.handshake.query.userId;
-    console.log(`User is connected ${userId}`);
+    console.log(`User is connected with ID: ${userId}`);
 
-    // When player is disconnected remove their document from DB
+    // This Function called when player is disconnected, 
+    // This function remove their document from DB
     playerDisconnect = () => {
         console.log("User is Disconnected");
         Player.findById(userId, (error, player) => {
@@ -21,10 +22,17 @@ exports.initGame = (sio, socket) => {
                 player.remove();
             }
         });
+    };
+    // This Function called when player successfully create new room  
+    createNewRoom = (roomId) => {
+        console.log(this);
+        // Join the Room with the same name 
+        this.join(roomId.toString());
+
     }
     gameSocket.on("disconnect", playerDisconnect);
-
-
+    gameSocket.on('createNewRoom', createNewRoom);
+    
 }
 
 
