@@ -86,6 +86,8 @@ export default class Lobby extends Component {
                 currentRoom: res.data.room,
                 currentComponent: "game"
             })
+            console.log(res.data.room._id)
+            this.socket.emit("createNewRoom" , res.data.room._id )
             this.getAllRoomsAPI();
         })
 
@@ -141,6 +143,7 @@ export default class Lobby extends Component {
         getRoom(roomID).then(res => {
             joinedRoom = res.data.room;
             console.log('www.',joinedRoom,'.com')
+            this.socket.emit("joinRoom" , roomID )
         }).catch(err => {
             console.log(err)
         });
