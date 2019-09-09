@@ -5,6 +5,9 @@ const cors = require('cors');
 const http = require("http");
 const socketIO = require("socket.io");
 
+// Database Models
+const Player = require('./app/models/player');
+
 // Require route files
 const cardRoutes = require('./app/routes/card_routes');
 const playerRoutes = require('./app/routes/player_router');
@@ -32,7 +35,18 @@ const io = socketIO(server);
 
 // Socket
 io.on("connection", socket => {
-    console.log("User is connected");
+    const userId = socket.handshake.query.userId;
+    console.log(`User is connected ${userId}`);
+    socket.on("disconnect", () => {
+        console.log("Please Work")
+        Player.findById(userId, (error, player) => {
+            if(player){
+                player.remove();
+            }
+        });
+    })
+
+
 });
 
 // Define port for API to run on
