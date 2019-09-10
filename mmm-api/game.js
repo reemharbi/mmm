@@ -19,10 +19,14 @@ exports.initGame = (sio, socket) => {
         console.log("User is Disconnected");
         Player.findById(userId, (error, player) => {
             if (player) {
-                player.remove((error, player)=>{
-                    Room.findOne({players: player},(error, room) => {
-                        room.players.pull(userId);
-                        room.save();
+                player.remove((error, player) => {
+                    Room.findOne({ players: player }, (error, room) => {
+                        if (room) {
+                            console.log("in room before: ", room.players.length);
+                            room.players.pull(userId);
+                            room.save();
+                            console.log("in room after: ", room.players.length);
+                        }
                     });
 
                 });
@@ -31,8 +35,7 @@ exports.initGame = (sio, socket) => {
     };
     // This Function called when player successfully create new room  
     createNewRoom = (roomId) => {
-        console.log(this);
-        console.log("room id: ",roomId);
+        console.log("room id: ", roomId);
         // Join the Room with the same name 
         gameSocket.join(roomId.toString());
 
@@ -42,14 +45,14 @@ exports.initGame = (sio, socket) => {
         Room.findById(data.roomID, (error, room) => {
             if (room) {
                 console.log(room.players.length);
-                if (room.players.length < room.limit){
-                room.players.push({_id: data.userID});
-                room.save();
-                gameSocket.join(data.roomID.toString());
-                gameSocket.emit("playerJoinedRoom",data.roomID);
+                if (room.players.length < room.limit) {
+                    room.players.push({ _id: data.userID });
+                    room.save();
+                    gameSocket.join(data.roomID.toString());
+                    gameSocket.emit("playerJoinedRoom", data.roomID);
 
                 } else {
-                    
+
                     gameSocket.emit("playerFaildToJoin");
                 }
             }
@@ -59,7 +62,7 @@ exports.initGame = (sio, socket) => {
     gameSocket.on("disconnect", playerDisconnect);
     gameSocket.on('createNewRoom', createNewRoom);
     gameSocket.on('joinRoom', joinRoom);
-    
+
 }
 
 
