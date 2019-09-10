@@ -13,19 +13,19 @@ exports.initGame = (sio, socket) => {
     const userId = gameSocket.handshake.query.userId;
     console.log(`User is connected with ID: ${userId}`);
 
-    // This Function called when player is disconnected, 
+    // This function called when player is disconnected, 
     // This function remove their document from DB
     playerDisconnect = () => {
         console.log("User is Disconnected");
         Player.findById(userId, (error, player) => {
             if (player) {
                 player.remove((error, player) => {
+                    // Check if player exist in room 
+                    // if they do remove their id from room.players
                     Room.findOne({ players: player }, (error, room) => {
                         if (room) {
-                            console.log("in room before: ", room.players.length);
                             room.players.pull(userId);
                             room.save();
-                            console.log("in room after: ", room.players.length);
                         }
                     });
 
@@ -53,7 +53,7 @@ exports.initGame = (sio, socket) => {
 
                 } else {
 
-                    gameSocket.emit("playerFaildToJoin");
+                    gameSocket.emit("playerFailedToJoin");
                 }
             }
         })
