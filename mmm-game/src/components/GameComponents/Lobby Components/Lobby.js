@@ -223,9 +223,15 @@ export default class Lobby extends Component {
         });
     }
 
+    updateCurrentRoom = (roomId) => {
 
-
-
+        console.log("Update current room, for room: ",roomId)
+        getRoom(roomId).then(res => {
+            this.setState({
+                currentRoom: res.data.room
+            })
+        });
+    }
 
     render() {
         const username = this.state.user && this.state.user.name
@@ -249,7 +255,7 @@ export default class Lobby extends Component {
         else if (this.state.currentComponent === 'game') {
 
             return (<div>
-                <Game role={this.state.role} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom}/>
+                <Game role={this.state.role} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom} updateCurrentRoom={this.updateCurrentRoom}/>
             </div>
             )
         }
