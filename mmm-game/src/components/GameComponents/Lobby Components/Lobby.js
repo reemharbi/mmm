@@ -10,6 +10,7 @@ import socketIOClient from "socket.io-client";
 import endpoint from '../../../socket';
 import './Lobby.css';
 import Waiting from './Game/Waiting';
+import Disconnected from './Game/Disconnected';
 
 export default class Lobby extends Component {
 
@@ -222,7 +223,7 @@ export default class Lobby extends Component {
 
 
         // return  <Game role={this.state.role} exitGame={this.exitGame} />
-        return <Waiting />
-
+        // return <Waiting />
+        return <Disconnected />
     }
 }
