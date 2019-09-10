@@ -14,10 +14,10 @@ export default class InvestorView extends Component {
         console.log(this.props.cards[0])
         return (
             <div>
-               <Card>
-               <p>{this.props.cards[0]}</p>
+               <Card className="project-card flip-vertical-right">
+               <div className="project-text text-flip">{this.props.cards[0]}</div>
                 </Card>
-                <Button onClick={this.props.exitGame}> EXIT GAME</Button>
+                <Button className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
             </div>
         )
     }
