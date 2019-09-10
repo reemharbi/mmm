@@ -86,13 +86,13 @@ export default class Lobby extends Component {
         createRoom(newRoom).then(res => {
             this.setState({
                 currentRoom: res.data.room,
-                currentComponent: "game"
+                currentComponent: "game",
+                roomName: ""
             })
+            console.log(res.data.room._id)
+            this.socket.emit("createNewRoom" , res.data.room._id )
             this.getAllRoomsAPI();
-        })
 
-        this.setState({
-            roomName: ""
         })
 
     }
@@ -105,7 +105,7 @@ export default class Lobby extends Component {
         createPlayer(newPlayer).then(res => {
             this.setState({ user: res.data.player });
             console.log(this.state.user._id);
-            this.socket = socketIOClient(endpoint,{query:  `userId=${this.state.user._id}`});
+            this.socket = socketIOClient(endpoint, { query: `userId=${this.state.user._id}` });
 
         });
 
@@ -137,12 +137,12 @@ export default class Lobby extends Component {
 
     //Changes the component to enter a room
     enterRoom = (roomID) => {
-        console.log('room ID',roomID);
-        
+        console.log('room ID', roomID);
+        this.socket.emit("joinRoom" , {roomID: roomID, userID: this.state.user._id});
+
         let joinedRoom = null;
         getRoom(roomID).then(res => {
             joinedRoom = res.data.room;
-            console.log('www.',joinedRoom,'.com')
         }).catch(err => {
             console.log(err)
         });
@@ -161,7 +161,7 @@ export default class Lobby extends Component {
             currentComponent: 'room',
             currentRoom: null
         })
-        console.log("hi, i'm exitRoom..nice to meet you" , this.state.currentRoom)
+        console.log("hi, i'm exitRoom..nice to meet you", this.state.currentRoom)
     }
 
     roomsFilter = (e) => {
@@ -183,47 +183,32 @@ export default class Lobby extends Component {
 
 
     render() {
+        const username = this.state.user && this.state.user.name
+        console.log(this.state.user && this.state.user.name)
+        console.log(this.state.rooms)
+        // now we're checking which component to display based on currentComponent from state
+        if (this.state.currentComponent === 'user') {
+            return (<div>
+                <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
+            </div>)
+        } else if (this.state.currentComponent === 'room') {
+            return (
+                <Container center>
+                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold' }} verticalAlign='middle'>Welcome {username}! </Grid>
+                    <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
+                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+                </Container>
+            )
+        }
 
-        // const username = this.state.user && this.state.user.name
-        
-        // console.log(this.state.user && this.state.user.name)
-        // console.log(this.state.rooms)
-        // // now we're checking which component to display based on currentComponent from state
-        // if (this.state.currentComponent === 'user') {
-        //     return (<div>
-        //         <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
-        //     </div>)
-        // } else if (this.state.currentComponent === 'room') {
-        //     return (
-        //         <Container center>
-        //             <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
-        //             <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-        //             <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
-        //         </Container>
-        //     )
-        // }
+        else if (this.state.currentComponent === 'game') {
 
-        // else if (this.state.currentComponent === 'game') {
-
-        //     return (<div>
-        //         <Game role={this.state.role} exitGame={this.exitGame} />
-        //     </div>
-        //     )
-        // }
-
-
-
-
-
-        // else {
-        //     return (
-        //         <div>loading</div>
-        //     )
-        // }
-
-
-        // return  <Game role={this.state.role} exitGame={this.exitGame} />
+            return (<div>
+                <Game role={this.state.role} exitGame={this.exitGame} />
+            </div>
+            )
+        }
         // return <Waiting />
-        return <Disconnected />
+        // return <Disconnected />
     }
 }
