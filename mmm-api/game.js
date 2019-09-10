@@ -37,6 +37,7 @@ exports.initGame = (sio, socket) => {
     createNewRoom = (roomId) => {
         console.log("room id: ", roomId);
         // Join the Room with the same name 
+        io.emit("updateDB" , {for: "everyone"})
         gameSocket.join(roomId.toString());
 
     }
@@ -47,9 +48,12 @@ exports.initGame = (sio, socket) => {
                 console.log(room.players.length);
                 if (room.players.length < room.limit) {
                     room.players.push({ _id: data.userID });
-                    room.save();
-                    gameSocket.join(data.roomID.toString());
-                    gameSocket.emit("playerJoinedRoom", data.roomID);
+                    room.save(error => {
+
+                        gameSocket.join(data.roomID.toString());
+                        gameSocket.emit("playerJoinedRoom", data.roomID);
+                        io.emit("updateDB" , {for: "everyone"})
+                    });
 
                 } else {
 
@@ -59,9 +63,33 @@ exports.initGame = (sio, socket) => {
         })
 
     }
+
+    playerExitRoom = (data) => {
+        console.log("User is exited room");
+        Player.findById(data.userID, (error, player) => {
+            if (player) {
+                    Room.findOne({ players: player }, (error, room) => {
+                        if (room) {
+                            console.log("in room before: ", room.players.length);
+                            room.players.pull(userId);
+                            room.save();
+                            console.log("in room after: ", room.players.length);
+                            io.emit("updateDB" , {for: "everyone"})
+               
+                        }
+                    });
+
+            }
+        });
+        
+    }
+
+
+
     gameSocket.on("disconnect", playerDisconnect);
     gameSocket.on('createNewRoom', createNewRoom);
     gameSocket.on('joinRoom', joinRoom);
+    gameSocket.on("playerExitRoom" , playerExitRoom)
 
 }
 
