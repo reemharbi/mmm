@@ -10,8 +10,22 @@ export default class InvestorView extends Component {
             currentCard: this.props.cards[0]
         }
     }
+
+
+
+    componentDidMount(){
+
+        this.props.socket.on("updateDB" , this.props.updateRoom(this.props.room._id) )
+
+    }
+
+
+
+
     render() {
-        console.log(this.props.cards[0])
+
+        console.log("investor view",this.props.room)
+        // console.log(this.props.cards[0])
         return (
             <div>
                <Card className="project-card flip-vertical-right">

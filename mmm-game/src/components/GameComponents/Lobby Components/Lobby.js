@@ -37,6 +37,9 @@ export default class Lobby extends Component {
 
     }
 
+    refreshRoom(){
+        
+    }
 
     getAllRoomsAPI = () => {
         getAllRooms().then(res => {
@@ -67,6 +70,14 @@ export default class Lobby extends Component {
         console.log(this.state.rooms)
 
     }
+
+
+
+
+
+
+
+    
 
 
 
@@ -106,14 +117,14 @@ export default class Lobby extends Component {
             this.setState({ user: res.data.player });
             console.log(this.state.user._id);
             this.socket = socketIOClient(endpoint, { query: `userId=${this.state.user._id}` });
+            // changing currentComponent to the room component
+            this.setState({
+                currentComponent: 'room'
+            });
 
         });
 
 
-        // changing currentComponent to the room component
-        this.setState({
-            currentComponent: 'room'
-        });
         console.log('change the component...')
 
     }
@@ -141,21 +152,39 @@ export default class Lobby extends Component {
         this.socket.emit("joinRoom" , {roomID: roomID, userID: this.state.user._id});
 
         let joinedRoom = null;
-        getRoom(roomID).then(res => {
-            joinedRoom = res.data.room;
-        }).catch(err => {
-            console.log(err)
-        });
-        this.setState({
-            currentComponent: 'game',
-            currentRoom: joinedRoom
 
+        //Checks if the player successfully joined the room 
+        this.socket.on("playerJoinedRoom" , (receivedRoomId) => {
+
+            getRoom(roomID).then(res => {
+                joinedRoom = res.data.room;
+                console.log("join room function",joinedRoom)
+                this.setState({
+                    currentComponent: 'game',
+                    currentRoom: joinedRoom
+        
+                })
+            }).catch(err => {
+                console.log(err)
+            });
         })
+
+
+
+        this.socket.on("playerFailedToJoin" , () => {
+            alert("Sorry, the game is full..")
+        })
+
+        
     }
 
 
 
     exitGame = () => {
+
+
+        this.socket.emit("playerExitRoom" , {roomID: this.state.currentRoom._id, userID: this.state.user._id});
+
 
         this.setState({
             currentComponent: 'room',
@@ -180,6 +209,22 @@ export default class Lobby extends Component {
 
     }
 
+    updateRoom = (roomID) => {
+        let joinedRoom = null;
+        getRoom(roomID).then(res => {
+            console.log("this is the update room again..." , res.data.room)
+            joinedRoom = res.data.room;
+            this.setState({
+                currentRoom: joinedRoom
+    
+            })
+        }).catch(err => {
+            console.log(err)
+        });
+    }
+
+
+
 
 
     render() {
@@ -196,7 +241,7 @@ export default class Lobby extends Component {
                 <Container center>
                     <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold' }} verticalAlign='middle'>Welcome {username}! </Grid>
                     <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} socket={this.socket} getAllRoomsAPI={this.getAllRoomsAPI}/>
                 </Container>
             )
         }
@@ -204,7 +249,7 @@ export default class Lobby extends Component {
         else if (this.state.currentComponent === 'game') {
 
             return (<div>
-                <Game role={this.state.role} exitGame={this.exitGame} />
+                <Game role={this.state.role} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom}/>
             </div>
             )
         }
