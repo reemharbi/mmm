@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" style="margin: auto; display: block; shape-rendering: auto;" width="88" height="74" preserveAspectRatio="xMidYMid">
+<style type="text/css">
+  text {
+    text-anchor: middle; font-size: 87px; opacity: 0;
+  }
+</style>
+<g transform="translate(44,37)">
+  <g transform="translate(-8,24)"><g class="path" style="transform-origin: -15.31px -0.814392px; opacity: 1; animation: 1s linear -0.44s infinite normal forwards running blink-f171df37-d538-45d3-87b2-0021367da35c;"><path d="M7.13-1.13L7.13-1.13L7.13-1.13Q5.31-2.96 5.31-5.57L5.31-5.57L5.31-5.57Q5.31-8.18 7.13-10.05L7.13-10.05L7.13-10.05Q8.96-11.92 11.57-11.92L11.57-11.92L11.57-11.92Q14.18-11.92 16.05-10.05L16.05-10.05L16.05-10.05Q17.92-8.18 17.92-5.57L17.92-5.57L17.92-5.57Q17.92-2.96 16.05-1.13L16.05-1.13L16.05-1.13Q14.18 0.70 11.57 0.70L11.57 0.70L11.57 0.70Q8.96 0.70 7.13-1.13" fill="#9df871" stroke="none" stroke-width="none" transform="translate(-26.92498779296875,4.795609741210938)" style="fill: rgb(81, 202, 204);"></path></g><g class="path" style="transform-origin: 5.31px -0.814392px; opacity: 1; animation: 1s linear -0.22s infinite normal forwards running blink-f171df37-d538-45d3-87b2-0021367da35c;"><path d="M27.75-1.13L27.75-1.13L27.75-1.13Q25.93-2.96 25.93-5.57L25.93-5.57L25.93-5.57Q25.93-8.18 27.75-10.05L27.75-10.05L27.75-10.05Q29.58-11.92 32.19-11.92L32.19-11.92L32.19-11.92Q34.80-11.92 36.67-10.05L36.67-10.05L36.67-10.05Q38.54-8.18 38.54-5.57L38.54-5.57L38.54-5.57Q38.54-2.96 36.67-1.13L36.67-1.13L36.67-1.13Q34.80 0.70 32.19 0.70L32.19 0.70L32.19 0.70Q29.58 0.70 27.75-1.13" fill="#9df871" stroke="none" stroke-width="none" transform="translate(-26.92498779296875,4.795609741210938)" style="fill: rgb(157, 248, 113);"></path></g><g class="path" style="transform-origin: 25.93px -0.814392px; opacity: 1; animation: 1s linear 0s infinite normal forwards running blink-f171df37-d538-45d3-87b2-0021367da35c;"><path d="M48.37-1.13L48.37-1.13L48.37-1.13Q46.55-2.96 46.55-5.57L46.55-5.57L46.55-5.57Q46.55-8.18 48.37-10.05L48.37-10.05L48.37-10.05Q50.20-11.92 52.81-11.92L52.81-11.92L52.81-11.92Q55.42-11.92 57.29-10.05L57.29-10.05L57.29-10.05Q59.16-8.18 59.16-5.57L59.16-5.57L59.16-5.57Q59.16-2.96 57.29-1.13L57.29-1.13L57.29-1.13Q55.42 0.70 52.81 0.70L52.81 0.70L52.81 0.70Q50.20 0.70 48.37-1.13" fill="#9df871" stroke="none" stroke-width="none" transform="translate(-26.92498779296875,4.795609741210938)" style="fill: rgb(224, 255, 119);"></path></g></g>
+</g>
+<style id="blink-f171df37-d538-45d3-87b2-0021367da35c" data-anikit="">@keyframes blink-f171df37-d538-45d3-87b2-0021367da35c {
+  0% { opacity: 1; }
+  49.75% { opacity: 1; }
+  50.24999999999999% { opacity: 0; }
+  99.5% { opacity: 0; }
+  100% { opacity: 1; }
+}</style><style id="blink-f171df37-d538-45d3-87b2-0021367da35c" data-anikit="">@keyframes blink-f171df37-d538-45d3-87b2-0021367da35c {
+  0% { opacity: 1; }
+  49.75% { opacity: 1; }
+  50.24999999999999% { opacity: 0; }
+  99.5% { opacity: 0; }
+  100% { opacity: 1; }
+}</style></svg>

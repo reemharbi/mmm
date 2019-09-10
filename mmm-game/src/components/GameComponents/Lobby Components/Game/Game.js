@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Investor from './InvestorView'
 import firebase from '../firebase';
 import Card from './Card'
+import './Game.css'
+
 export default class Game extends Component {
 
     state ={

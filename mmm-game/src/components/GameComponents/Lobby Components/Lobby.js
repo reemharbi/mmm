@@ -9,6 +9,8 @@ import { getAllPlayers, getPlayer, createPlayer, deletePlayer, getAllRooms, getR
 import socketIOClient from "socket.io-client";
 import endpoint from '../../../socket';
 import './Lobby.css';
+import Waiting from './Game/Waiting';
+import Disconnected from './Game/Disconnected';
 
 export default class Lobby extends Component {
 
@@ -251,20 +253,7 @@ export default class Lobby extends Component {
             </div>
             )
         }
-
-
-
-
-
-        else {
-            return (
-                <div>loading</div>
-            )
-        }
-
-
-
-
-
+        // return <Waiting />
+        // return <Disconnected />
     }
 }
