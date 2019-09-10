@@ -8,8 +8,15 @@ export default class RoomsList extends Component {
 
    
     
+    componentWillMount(){
+        this.props.getAllRoomsAPI();
+    }
+    componentDidMount(){
+
+        this.props.socket.on("updateDB" , this.props.getAllRoomsAPI )
 
 
+    }
 
 
 
