@@ -32,7 +32,7 @@ router.get('/api/rooms', (req, res) => {
  * Description: Get a room by room ID
  */
 router.get('/api/rooms/:id', (req, res) => {
-    Room.findById(req.params.id).populate().exec((error, room) => {
+    Room.findById(req.params.id).populate('players').exec((error, room) => {
         if (!error) {
             if (room) {
                 // Return the room

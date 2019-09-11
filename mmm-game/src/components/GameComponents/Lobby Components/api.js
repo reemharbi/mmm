@@ -15,7 +15,9 @@ export const getPlayer = (id) =>
 export const createPlayer = (player) => 
     axios.post( `${apiUrl}/players` , player)
 
-
+export const updatePlayer = (id, body) => {
+   return axios.patch( `${apiUrl}/players/${id}` ,body)
+}
 export const deletePlayer = (id) => 
     axios({
         method: 'DESTROY',

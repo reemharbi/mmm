@@ -62,15 +62,8 @@ exports.initGame = (sio, socket) => {
             io.to(data.roomID).emit("updateCurrentRoom", data.roomID);
             // Call updateDb on all clients
             io.emit("updateDB", { for: "everyone" });
-
-            // const clients = io.sockets.adapter.rooms[data.roomID].sockets;
-            // //to get the number of clients
-            // var numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
-            // console.log(numClients);
-
             // Check if room is full
             if (room.players.length === room.limit) {
-              // start game 
 
               io.to(data.roomID).emit("updateCurrentRoom", data.roomID);
             }
@@ -109,33 +102,36 @@ exports.initGame = (sio, socket) => {
 
   }
 
-  setGame = (room) => {
+  setGame = (r_room) => {
     let card;
-    Room.findById(room._id, (error, room) => {
-      if (room.ready === 3 ){
-        Player.findById(room.players[Math.floor(Math.random() * room.limit)], (error, player) => {
-          if (player) {
-            player.role = 'inv';
-            player.save();
-          }
-        });
-    
-        Card.find({}, (error, cards) => {
-          if (!error) {
-    
-            card = cards[Math.floor(Math.random() * cards.length)];
-    
-            io.to(room._id).emit("setGame", card);
-    
-            console.log(card);
-            io.to(room._id).emit("startGame", card);
-          }
-        });
-        io.to(room._id).emit("updateCurrentRoom", room._id);
-    
-      }
-    })
-    
+    console.log("Set Game - number of players: ", r_room.players.length);
+
+
+      Card.find({}, (error, cards) => {
+        if (!error) {
+
+          card = cards[Math.floor(Math.random() * cards.length)];
+
+          io.to(r_room._id).emit("setGame", card);
+
+          io.to(r_room._id).emit("startGame", card);
+        }
+      });
+      if (r_room.players.length === r_room.limit ) {
+        Room.findById(r_room._id).populate('players').exec((error, room) =>{
+          if(!room.players.some(player => player.role === 'inv')){
+            Player.findById(room.players[Math.floor(Math.random() * room.limit)], (error, player) => {
+              if (player) {
+                player.role = 'inv';
+                player.save();
+              }
+            });
+          } 
+        })
+      io.to(r_room._id).emit("updateCurrentRoom", r_room._id);
+
+    }
+
   }
 
 
@@ -144,7 +140,7 @@ exports.initGame = (sio, socket) => {
   gameSocket.on('createNewRoom', createNewRoom);
   gameSocket.on('joinRoom', joinRoom);
   gameSocket.on("playerExitRoom", playerExitRoom);
-  gameSocket.on("startGame", setGame)
+  gameSocket.on("playerIsReady", setGame)
 }
 
 
