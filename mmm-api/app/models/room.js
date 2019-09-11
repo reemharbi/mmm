@@ -15,10 +15,6 @@ const roomSchema = new mongoose.Schema({
     limit: {
         type: Number,
         default: 3
-    },
-    ready: {
-        type: Number,
-        default: 0
     }
 }, {
         timestamps: true
