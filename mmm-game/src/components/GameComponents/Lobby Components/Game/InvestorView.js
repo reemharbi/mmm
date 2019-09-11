@@ -6,22 +6,30 @@ import loading from './writing.svg'
 
 export default class InvestorView extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            currentCard: this.props.cards[0]
-        }
+
+
+
+    componentDidMount(){
+
+        this.props.socket.on("updateDB" , this.props.updateRoom(this.props.room._id) )
+
     }
+
+
+
+
     render() {
-        console.log(this.props.cards[0])
+
+        console.log("investor view",this.props.room)
+        // console.log(this.props.cards[0])
         return (
             <div>
-                  <Grid columns={3}>
+    <Grid columns={3}>
     <Grid.Row style={{paddingBottom: '0px'}}>
       <Grid.Column>
             <div className='card-div'>
                 <Card className="project-card flip-vertical-right">
-                    <div className="project-text text-flip">{this.props.cards[0]}</div>
+                    <div className="project-text text-flip">{this.props.card.title}</div>
                 </Card>
             </div>
       </Grid.Column>
@@ -32,7 +40,7 @@ export default class InvestorView extends Component {
         <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
     </Grid.Row>
-
+//
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px'}}>
         <Grid.Column>
             <div style={{height:'8vh'}}>

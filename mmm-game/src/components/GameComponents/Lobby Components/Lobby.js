@@ -5,7 +5,17 @@ import LobbyHeader from './LobbyHeader/LobbyHeader';
 import UserName from './UserName';
 import Game from './Game/Game';
 import { Container, Grid } from 'semantic-ui-react';
-import { getAllPlayers, getPlayer, createPlayer, deletePlayer, getAllRooms, getRoom, createRoom, deleteRoom } from './api'
+import {
+    getAllPlayers,
+    getPlayer,
+    createPlayer,
+    updatePlayer,
+    deletePlayer,
+    getAllRooms,
+    getRoom,
+    createRoom,
+    deleteRoom
+} from './api'
 import socketIOClient from "socket.io-client";
 import endpoint from '../../../socket';
 import './Lobby.css';
@@ -38,6 +48,9 @@ export default class Lobby extends Component {
 
     }
 
+    refreshRoom() {
+
+    }
 
     getAllRoomsAPI = () => {
         getAllRooms().then(res => {
@@ -71,6 +84,14 @@ export default class Lobby extends Component {
 
 
 
+
+
+
+
+
+
+
+
     // A function to handle the room adding functionality
     addRoom = (value) => {
 
@@ -87,13 +108,13 @@ export default class Lobby extends Component {
         createRoom(newRoom).then(res => {
             this.setState({
                 currentRoom: res.data.room,
-                currentComponent: "game"
+                currentComponent: "game",
+                roomName: ""
             })
+            console.log(res.data.room._id)
+            this.socket.emit("createNewRoom", res.data.room._id)
             this.getAllRoomsAPI();
-        })
 
-        this.setState({
-            roomName: ""
         })
 
     }
@@ -106,15 +127,15 @@ export default class Lobby extends Component {
         createPlayer(newPlayer).then(res => {
             this.setState({ user: res.data.player });
             console.log(this.state.user._id);
-            this.socket = socketIOClient(endpoint,{query:  `userId=${this.state.user._id}`});
+            this.socket = socketIOClient(endpoint, { query: `userId=${this.state.user._id}` });
+            // changing currentComponent to the room component
+            this.setState({
+                currentComponent: 'room'
+            });
 
         });
 
 
-        // changing currentComponent to the room component
-        this.setState({
-            currentComponent: 'room'
-        });
         console.log('change the component...')
 
     }
@@ -138,31 +159,49 @@ export default class Lobby extends Component {
 
     //Changes the component to enter a room
     enterRoom = (roomID) => {
-        console.log('room ID',roomID);
-        
-        let joinedRoom = null;
-        getRoom(roomID).then(res => {
-            joinedRoom = res.data.room;
-            console.log('www.',joinedRoom,'.com')
-        }).catch(err => {
-            console.log(err)
-        });
-        this.setState({
-            currentComponent: 'game',
-            currentRoom: joinedRoom
+        console.log('room ID', roomID);
+        this.socket.emit("joinRoom", { roomID: roomID, userID: this.state.user._id });
 
+        let joinedRoom = null;
+
+        //Checks if the player successfully joined the room 
+        this.socket.on("playerJoinedRoom", (receivedRoomId) => {
+
+            getRoom(roomID).then(res => {
+                joinedRoom = res.data.room;
+                console.log("join room function", joinedRoom)
+                this.setState({
+                    currentComponent: 'game',
+                    currentRoom: joinedRoom
+
+                })
+            }).catch(err => {
+                console.log(err)
+            });
         })
+
+
+
+        this.socket.on("playerFailedToJoin", () => {
+            alert("Sorry, the game is full..")
+        })
+
+
     }
 
 
 
     exitGame = () => {
 
+
+        this.socket.emit("playerExitRoom", { roomID: this.state.currentRoom._id, userID: this.state.user._id });
+
+
         this.setState({
             currentComponent: 'room',
             currentRoom: null
         })
-        console.log("hi, i'm exitRoom..nice to meet you" , this.state.currentRoom)
+        console.log("hi, i'm exitRoom..nice to meet you", this.state.currentRoom)
     }
 
     roomsFilter = (e) => {
@@ -181,7 +220,19 @@ export default class Lobby extends Component {
 
     }
 
+    updateRoom = (roomID) => {
+        let joinedRoom = null;
+        getRoom(roomID).then(res => {
+            console.log("this is the update room again...", res.data.room)
+            joinedRoom = res.data.room;
+            this.setState({
+                currentRoom: joinedRoom
 
+            })
+        }).catch(err => {
+            console.log(err)
+        });
+    }
 
     render() {
 
@@ -204,34 +255,49 @@ export default class Lobby extends Component {
                 <div class="bg bg3"></div>
                     <Grid textAlign='center' style={{ marginTop: '5rem', color: 'black', fontWeight: 'bold' ,marginBottom: '5rem', fontSize: '7rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
                     <LobbyHeader roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} socket={this.socket} getAllRoomsAPI={this.getAllRoomsAPI} />
                     {/* </div> */}
                 </Container>
               
             )
         }
 
+        
+        
         else if (this.state.currentComponent === 'game') {
-
+            
             return (<div>
-                <Game role={this.state.role} exitGame={this.exitGame} />
+                <Game user={this.state.user} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom} updateCurrentRoom={this.updateCurrentRoom} />
             </div>
             )
         }
-
-
-
-
-
-        else {
-            return (
-                <div>loading</div>
-            )
-        }
-
-
-        // return  <Game role={this.state.role} exitGame={this.exitGame} />
         // return <Waiting />
         // return <Disconnected />
     }
+    
+        updateCurrentRoom = (roomId) => {
+    
+            console.log("Update current room, for room: ", roomId)
+            getRoom(roomId).then(res => {
+                this.setState({
+                    currentRoom: res.data.room
+                });
+                const user = this.state.currentRoom.players.find((player) => {
+                    return player._id === this.state.user._id;
+                });
+                console.error("what is user: ", user)
+                
+                if (this.state.currentRoom.players.length === this.state.currentRoom.limit &&
+                    !user.ready) {
+                        console.error(user.name, " is trying")
+     
+                    updatePlayer(user._id, { ready: true }).then(res => {
+                        console.error(user.name, " is ready")
+                        this.socket.emit("playerIsReady", this.state.currentRoom);
+                    });
+    
+                }
+            });
+    
+        }
 }

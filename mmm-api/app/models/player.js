@@ -9,7 +9,12 @@ const playerSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+        default: ""
     },
+    ready: {
+        type: Boolean,
+        default: false
+    }
 }, {
         timestamps: true
     });

@@ -7,7 +7,7 @@ export default class ProjectManagerView extends Component {
     constructor(props){
         super(props);
         this.state = {
-            currentCard: this.props.cards[0]
+            currentCard: this.props.card
         }
     }
     render() {
@@ -18,7 +18,7 @@ export default class ProjectManagerView extends Component {
       <Grid.Column>
             <div className='card-div'>
                 <Card className="project-card flip-vertical-right">
-                    <div className="project-text text-flip">{this.props.cards[0]}</div>
+                    <div className="project-text text-flip">{this.props.card.title}</div>
                 </Card>
             </div>
       </Grid.Column>
@@ -26,7 +26,7 @@ export default class ProjectManagerView extends Component {
       <Image centered style={{marginTop:'1rem'}} src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='tiny' circular />
       </Grid.Column>
       <Grid.Column>
-        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+        <Button floated='right' color='red' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
     </Grid.Row>
 
