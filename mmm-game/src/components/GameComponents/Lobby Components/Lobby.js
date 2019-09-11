@@ -185,52 +185,52 @@ export default class Lobby extends Component {
 
     render() {
 
-        const username = this.state.user && this.state.user.name
+        // const username = this.state.user && this.state.user.name
         
-        console.log(this.state.user && this.state.user.name)
-        console.log(this.state.rooms)
-        // now we're checking which component to display based on currentComponent from state
-        if (this.state.currentComponent === 'user') {
-            return (<div>
-                <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
-            </div>)
-        } else if (this.state.currentComponent === 'room') {
-            return (
+        // console.log(this.state.user && this.state.user.name)
+        // console.log(this.state.rooms)
+        // // now we're checking which component to display based on currentComponent from state
+        // if (this.state.currentComponent === 'user') {
+        //     return (<div>
+        //         <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
+        //     </div>)
+        // } else if (this.state.currentComponent === 'room') {
+        //     return (
                 
-                <Container center>
-                {/* <div class="content"> */}
-                <div class="bg"></div>
-                <div class="bg bg2"></div>
-                <div class="bg bg3"></div>
-                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'black', fontWeight: 'bold' ,marginBottom: '5rem', fontSize: '7rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
-                    <LobbyHeader roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
-                    {/* </div> */}
-                </Container>
+        //         <Container center>
+        //         {/* <div class="content"> */}
+        //         <div class="bg"></div>
+        //         <div class="bg bg2"></div>
+        //         <div class="bg bg3"></div>
+        //             <Grid textAlign='center' style={{ marginTop: '5rem', color: 'black', fontWeight: 'bold' ,marginBottom: '5rem', fontSize: '7rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
+        //             <LobbyHeader roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
+        //             <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+        //             {/* </div> */}
+        //         </Container>
               
-            )
-        }
+        //     )
+        // }
 
-        else if (this.state.currentComponent === 'game') {
+        // else if (this.state.currentComponent === 'game') {
 
-            return (<div>
-                <Game role={this.state.role} exitGame={this.exitGame} />
-            </div>
-            )
-        }
-
-
+        //     return (<div>
+        //         <Game role={this.state.role} exitGame={this.exitGame} />
+        //     </div>
+        //     )
+        // }
 
 
 
-        else {
-            return (
-                <div>loading</div>
-            )
-        }
 
 
-        // return  <Game role={this.state.role} exitGame={this.exitGame} />
+        // else {
+        //     return (
+        //         <div>loading</div>
+        //     )
+        // }
+
+
+        return  <Game role={this.state.role} exitGame={this.exitGame} />
         // return <Waiting />
         // return <Disconnected />
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Investor from './InvestorView'
+import ProjectManager from './ProjectManagerView'
 import firebase from '../firebase';
 import Card from './Card'
 import './Game.css'
@@ -51,7 +52,7 @@ export default class Game extends Component {
         }
         else if (this.props.role == false){
             return <div>
-
+                 <ProjectManager exitGame={this.props.exitGame} cards={this.state.cards}/>
             </div>
         }
     }

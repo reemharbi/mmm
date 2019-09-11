@@ -29,9 +29,17 @@ export default class InvestorView extends Component {
       </Grid.Column>
     
       <Grid.Column>
-        <Button floated='right' style={{marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
     </Grid.Row>
+    <Grid.Row>
+    </Grid.Row>
+    <Grid.Row>
+    <Grid.Column>
+
+       </Grid.Column>
+    </Grid.Row>
+
         </Grid>
         <div class="bg"></div>
         <div class="bg bg2"></div>
