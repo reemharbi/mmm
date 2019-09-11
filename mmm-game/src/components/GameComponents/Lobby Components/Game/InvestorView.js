@@ -31,7 +31,6 @@ export default class InvestorView extends Component {
                <Card className="project-card flip-vertical-right">
                <div className="project-text text-flip">{this.props.cards[0]}</div>
                 </Card>
-                <Button className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
             </div>
         )
     }

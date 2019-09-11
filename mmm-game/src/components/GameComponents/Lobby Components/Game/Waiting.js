@@ -11,7 +11,7 @@ export default class Waiting extends Component {
     <div className="loading">
     <p>Waiting for other players
         <Image src={dot} size='small' style={{marginLeft:'23rem'}} />
-    <p>(1/3)</p>
+    <p>({this.props.room.players.length}/{this.props.room.limit})</p>
     </p>
    
     </div>
