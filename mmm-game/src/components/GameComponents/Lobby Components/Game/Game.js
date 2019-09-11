@@ -1,61 +1,84 @@
 import React, { Component } from 'react'
 import Investor from './InvestorView'
-import firebase from '../firebase';
-import Card from './Card'
-import './Game.css'
+import Card from './Card';
+import './Game.css';
+import Waiting from './Waiting';
+import Disconnetcted from './Disconnected';
+import { Button } from 'semantic-ui-react'
 
 export default class Game extends Component {
 
   state = {
-    cards: []
+    currenyCard: null,
+    currentComponent: 'waiting'
   }
 
 
 
+  
 
 
   componentDidMount() {
-    const cradsRef = firebase.database().ref('cards');
-    cradsRef.on('value', snapshot => {
-      const cardsState = snapshot.val();
+    
 
-
-      let cardsStateArray = [];
-      for (let i in cardsState) {
-        cardsStateArray.push(
-          cardsState[i].name
-        )
-      }
-
-      this.setState({
-        cards: cardsStateArray
-      }
-      )
-
-
-    })
     this.props.socket.on("updateCurrentRoom", (roomID) => this.props.updateCurrentRoom(roomID));
+
+    this.props.socket.on("startGame" , (card) => {
+      console.log("card: ", card,", players: ", this.props.room.players, " ,user: ", this.props.user._id)
+      const currentUser = this.props.room.players
+      console.log(currentUser);
+      console.log("current user in the game component" , currentUser)
+      if (currentUser.role == "inv"){
+        this.setState({
+          currentCard: card,
+          currentComponent: 'investor'
+        })
+      }
+
+      else{
+        this.setState({
+          currentCard: card,
+          currentComponent: 'project manager'
+        })
+
+      }
+      
+
+    } )
+
+
   }
 
 
   render() {
 
 
-    const cardsList = this.state.cards.map((card, index) => {
-      return <Card name={card.name} key={index} />
-    })
+    
 
 
-    if (this.props.role) {
+    if (this.state.currentComponent === 'investor') {
       return <div>
         <p>Current players in room: {this.props.room.players.length}</p>
         <Investor exitGame={this.props.exitGame} cards={this.state.cards} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
       </div>
     }
-    else if (this.props.role == false) {
+    else if (this.state.currentComponent === 'project manager') {
       return <div>
 
       </div>
+    }
+
+    else if(this.state.currentComponent === 'waiting'){
+      return <div>
+        <Waiting room={this.props.room}/>
+        <Button className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+        
+        </div>
+
+    }
+    else if (this.state.currentComponent === 'disconnetcted player'){
+      return <Disconnetcted />
+
     }
   }
 }

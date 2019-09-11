@@ -9,6 +9,7 @@ const playerSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+        default: ""
     },
 }, {
         timestamps: true

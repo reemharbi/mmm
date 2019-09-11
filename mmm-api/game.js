@@ -72,7 +72,7 @@ exports.initGame = (sio, socket) => {
             if (room.players.length === room.limit) {
               // start game 
 
-              setGame(room);
+              io.to(data.roomID).emit("updateCurrentRoom", data.roomID);
             }
           });
 
@@ -111,27 +111,31 @@ exports.initGame = (sio, socket) => {
 
   setGame = (room) => {
     let card;
-    Player.findById(room.players[Math.floor(Math.random() * room.limit)], (error, player) => {
-      if (player) {
-        player.role = 'inv';
-        player.save();
+    Room.findById(room._id, (error, room) => {
+      if (room.ready === 3 ){
+        Player.findById(room.players[Math.floor(Math.random() * room.limit)], (error, player) => {
+          if (player) {
+            player.role = 'inv';
+            player.save();
+          }
+        });
+    
+        Card.find({}, (error, cards) => {
+          if (!error) {
+    
+            card = cards[Math.floor(Math.random() * cards.length)];
+    
+            io.to(room._id).emit("setGame", card);
+    
+            console.log(card);
+            io.to(room._id).emit("startGame", card);
+          }
+        });
+        io.to(room._id).emit("updateCurrentRoom", room._id);
+    
       }
-    });
-
-    Card.find({}, (error, cards) => {
-      if (!error) {
-
-        card = cards[Math.floor(Math.random() * cards.length)];
-        console.log(card);
-
-        io.to(data.roomID).emit("setGame", card);
-
-      }
-    });
-
-    io.to(room._id).emit("startGame");
-    io.to(room._id).emit("updatePlayers");
-
+    })
+    
   }
 
 
@@ -140,7 +144,7 @@ exports.initGame = (sio, socket) => {
   gameSocket.on('createNewRoom', createNewRoom);
   gameSocket.on('joinRoom', joinRoom);
   gameSocket.on("playerExitRoom", playerExitRoom);
-
+  gameSocket.on("startGame", setGame)
 }
 
 

@@ -228,6 +228,8 @@ export default class Lobby extends Component {
         console.log("Update current room, for room: ",roomId)
         getRoom(roomId).then(res => {
             this.setState({
+                
+                
                 currentRoom: res.data.room
             })
         });
@@ -255,7 +257,7 @@ export default class Lobby extends Component {
         else if (this.state.currentComponent === 'game') {
 
             return (<div>
-                <Game role={this.state.role} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom} updateCurrentRoom={this.updateCurrentRoom}/>
+                <Game user={this.state.user} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom} updateCurrentRoom={this.updateCurrentRoom}/>
             </div>
             )
         }
