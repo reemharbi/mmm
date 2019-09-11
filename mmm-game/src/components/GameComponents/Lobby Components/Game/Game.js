@@ -57,14 +57,12 @@ export default class Game extends Component {
 
     if (this.state.currentComponent === 'investor') {
       return <div>
-        <p>Current players in room: {this.props.room.players.length}</p>
-        <Investor exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+        <Investor user={this.props.user} exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
       </div>
     }
     else if (this.state.currentComponent === 'project manager') {
       return <div>
-        <p>Current players in room: {this.props.room.players.length}</p>
-        <ProjectManager exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+        <ProjectManager user={this.props.user} exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
      
       </div>
     }

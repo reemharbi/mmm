@@ -2,26 +2,16 @@ import React, { Component } from 'react'
 import { Button, Card, Grid, Image } from 'semantic-ui-react'
 import './InvestorView.css'
 import './AnimatedBG.css'
-import loading from './writing.svg'
+import './Animations.css'
+import loading from './pencil.svg'
+
 
 export default class InvestorView extends Component {
-
-
-
-
     componentDidMount(){
-
         this.props.socket.on("updateDB" , this.props.updateRoom(this.props.room._id) )
-
     }
-
-
-
-
     render() {
-
-        console.log("investor view",this.props.room)
-        // console.log(this.props.cards[0])
+        const invName = this.props.room.players.find(player => player.role == 'inv').name
         return (
             <div>
     <Grid columns={3}>
@@ -34,27 +24,27 @@ export default class InvestorView extends Component {
             </div>
       </Grid.Column>
       <Grid.Column>
-      <Image centered style={{marginTop:'1rem'}} src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='tiny' circular />
+      <h3>{invName}</h3>
+      <h6>Investor</h6>
       </Grid.Column>
       <Grid.Column>
-        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
     </Grid.Row>
-//
+
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px'}}>
         <Grid.Column>
             <div style={{height:'8vh'}}>
             </div>  
         </Grid.Column>
         <Grid.Column>
-            <p className='fade-in-fwd scale-out-center'>Phase 1</p>
+            <p className='fade-in-fwd scale-out-center'>Investor</p>
         </Grid.Column>
     </Grid.Row>
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>
         <Grid.Column>
             <div>
-                <Card style={{paddingBottom: '0px'}} className="project-card player-card">
-                <Image  centered src={loading} size='tiny' style={{background:'rgba(255,255,255,.5)', marginTop:'5rem'}} />
+                <Card style={{paddingBottom: '0px'}} className="p1 project-card player-card">
+                <Image  centered src={loading} size='small' style={{background:'rgba(255,255,255,0)', marginTop:'5rem'}} />
                 </Card>
             </div>
        </Grid.Column>
@@ -65,14 +55,12 @@ export default class InvestorView extends Component {
        <Grid.Column>
             <div>
                 <Card style={{paddingBottom: '0px'}} className="project-card player-card p2">
-                <Image  centered src={loading} size='tiny' style={{background:'rgba(255,255,255,.5)', marginTop:'5rem'}} />
+                <Image  centered src={loading} size='small' style={{background:'rgba(255,255,255,0)', marginTop:'5rem'}} />
                 </Card>
             </div>
        </Grid.Column>
-
     </Grid.Row>
-
-        </Grid>
+</Grid>
 
         <div class="bg"></div>
         <div class="bg bg2"></div>
