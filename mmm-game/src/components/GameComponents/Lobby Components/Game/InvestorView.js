@@ -39,7 +39,7 @@ export default class InvestorView extends Component {
             </div>  
         </Grid.Column>
         <Grid.Column>
-            <p className='fade-in-fwd'>Phase 1</p>
+            <p className='fade-in-fwd scale-out-center'>Phase 1</p>
         </Grid.Column>
     </Grid.Row>
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>
