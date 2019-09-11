@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import RoomsList from './RoomsList'
 import firebase from './firebase';
-import Header from './LobbyHeader/Header';
+import LobbyHeader from './LobbyHeader/LobbyHeader';
 import UserName from './UserName';
 import Game from './Game/Game';
 import { Container, Grid } from 'semantic-ui-react';
@@ -11,6 +11,7 @@ import endpoint from '../../../socket';
 import './Lobby.css';
 import Waiting from './Game/Waiting';
 import Disconnected from './Game/Disconnected';
+import './Game/AnimatedBG.css'
 
 export default class Lobby extends Component {
 
@@ -184,46 +185,53 @@ export default class Lobby extends Component {
 
     render() {
 
-        // const username = this.state.user && this.state.user.name
+        const username = this.state.user && this.state.user.name
         
-        // console.log(this.state.user && this.state.user.name)
-        // console.log(this.state.rooms)
-        // // now we're checking which component to display based on currentComponent from state
-        // if (this.state.currentComponent === 'user') {
-        //     return (<div>
-        //         <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
-        //     </div>)
-        // } else if (this.state.currentComponent === 'room') {
-        //     return (
-        //         <Container center>
-        //             <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
-        //             <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
-        //             <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
-        //         </Container>
-        //     )
-        // }
+        console.log(this.state.user && this.state.user.name)
+        console.log(this.state.rooms)
+        // now we're checking which component to display based on currentComponent from state
+        if (this.state.currentComponent === 'user') {
+            return (<div>
+                <UserName userName={this.state.userName} onChange={this.userNameHandler} initUser={this.initUser} />
+            </div>)
+        } else if (this.state.currentComponent === 'room') {
+            return (
+                
+                <Container center>
+                {/* <div class="content"> */}
+                <div class="bg"></div>
+                <div class="bg bg2"></div>
+                <div class="bg bg3"></div>
+                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'black', fontWeight: 'bold' ,marginBottom: '5rem', fontSize: '7rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
+                    <LobbyHeader roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
+                    <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} />
+                    {/* </div> */}
+                </Container>
+              
+            )
+        }
 
-        // else if (this.state.currentComponent === 'game') {
+        else if (this.state.currentComponent === 'game') {
 
-        //     return (<div>
-        //         <Game role={this.state.role} exitGame={this.exitGame} />
-        //     </div>
-        //     )
-        // }
-
-
+            return (<div>
+                <Game role={this.state.role} exitGame={this.exitGame} />
+            </div>
+            )
+        }
 
 
 
-        // else {
-        //     return (
-        //         <div>loading</div>
-        //     )
-        // }
+
+
+        else {
+            return (
+                <div>loading</div>
+            )
+        }
 
 
         // return  <Game role={this.state.role} exitGame={this.exitGame} />
         // return <Waiting />
-        return <Disconnected />
+        // return <Disconnected />
     }
 }

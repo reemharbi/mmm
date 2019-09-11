@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Room from './Room'
-import { Container, Divider, Grid, Header, Icon } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 import './RoomList.css'
 
 export default class RoomsList extends Component {
@@ -16,8 +16,8 @@ export default class RoomsList extends Component {
         return (
            <Container center>
 
-    <Grid columns={3}>
-      <Grid.Row>
+    <Grid columns={1}>
+      <Grid.Row >
       {roomsList}
       </Grid.Row>
     </Grid>

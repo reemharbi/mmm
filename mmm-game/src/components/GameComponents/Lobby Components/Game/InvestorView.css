@@ -19,6 +19,10 @@
 }
 
 
+.card-div {
+  width: 10rem !important;
+}
+
 .flip-vertical-right {
 	-webkit-animation: flip-vertical-right 0.9s cubic-bezier(0.455, 0.030, 0.515, 0.955) 0.3s both;
 	        animation: flip-vertical-right 0.9s cubic-bezier(0.455, 0.030, 0.515, 0.955) 0.3s both;
@@ -66,4 +70,6 @@
               transform: rotateY(180deg);
     }
   }
+  
+
   

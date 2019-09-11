@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Button, Divider, Form } from 'semantic-ui-react'
+import { Divider, Form } from 'semantic-ui-react'
 import AddRoom from './AddRoom';
 import RoomFilter from './RoomFilter';
 
-export default class Header extends Component {
+export default class LobbyHeader extends Component {
     render() {
         return (
             <Form size="small" key="small">
