@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import RoomsList from './RoomsList'
 import firebase from './firebase';
-import Header from './LobbyHeader/Header';
+import LobbyHeader from './LobbyHeader/LobbyHeader';
 import UserName from './UserName';
 import Game from './Game/Game';
 import { Container, Grid } from 'semantic-ui-react';
@@ -21,6 +21,7 @@ import endpoint from '../../../socket';
 import './Lobby.css';
 import Waiting from './Game/Waiting';
 import Disconnected from './Game/Disconnected';
+import './Game/AnimatedBG.css'
 
 export default class Lobby extends Component {
 
@@ -233,34 +234,10 @@ export default class Lobby extends Component {
         });
     }
 
-    updateCurrentRoom = (roomId) => {
-
-        console.log("Update current room, for room: ", roomId)
-        getRoom(roomId).then(res => {
-            this.setState({
-                currentRoom: res.data.room
-            });
-            const user = this.state.currentRoom.players.find((player) => {
-                return player._id === this.state.user._id;
-            });
-            console.error("what is user: ", user)
-            
-            if (this.state.currentRoom.players.length === this.state.currentRoom.limit &&
-                !user.ready) {
-                    console.error(user.name, " is trying")
- 
-                updatePlayer(user._id, { ready: true }).then(res => {
-                    console.error(user.name, " is ready")
-                    this.socket.emit("playerIsReady", this.state.currentRoom);
-                });
-
-            }
-        });
-    }
-
-    
     render() {
+
         const username = this.state.user && this.state.user.name
+        
         console.log(this.state.user && this.state.user.name)
         console.log(this.state.rooms)
         // now we're checking which component to display based on currentComponent from state
@@ -270,16 +247,25 @@ export default class Lobby extends Component {
             </div>)
         } else if (this.state.currentComponent === 'room') {
             return (
+                
                 <Container center>
-                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'white', marginBottom: '5rem', fontSize: '5rem', fontFamily: 'Amatic SC, bold' }} verticalAlign='middle'>Welcome {username}! </Grid>
-                    <Header roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
+                {/* <div class="content"> */}
+                <div class="bg"></div>
+                <div class="bg bg2"></div>
+                <div class="bg bg3"></div>
+                    <Grid textAlign='center' style={{ marginTop: '5rem', color: 'black', fontWeight: 'bold' ,marginBottom: '5rem', fontSize: '7rem', fontFamily: 'Amatic SC, bold'  }} verticalAlign='middle'>Welcome {username}! </Grid>
+                    <LobbyHeader roomName={this.state.roomName} onChangeAdd={this.onChangeHandler} addRoom={this.addRoom} onChangeFilter={this.roomsFilter} val={this.state.filterContent} />
                     <RoomsList rooms={this.state.roomsToDisplay} enterRoom={this.enterRoom} socket={this.socket} getAllRoomsAPI={this.getAllRoomsAPI} />
+                    {/* </div> */}
                 </Container>
+              
             )
         }
 
+        
+        
         else if (this.state.currentComponent === 'game') {
-
+            
             return (<div>
                 <Game user={this.state.user} exitGame={this.exitGame} room={this.state.currentRoom} socket={this.socket} updateRoom={this.updateRoom} updateCurrentRoom={this.updateCurrentRoom} />
             </div>
@@ -288,4 +274,30 @@ export default class Lobby extends Component {
         // return <Waiting />
         // return <Disconnected />
     }
+    
+        updateCurrentRoom = (roomId) => {
+    
+            console.log("Update current room, for room: ", roomId)
+            getRoom(roomId).then(res => {
+                this.setState({
+                    currentRoom: res.data.room
+                });
+                const user = this.state.currentRoom.players.find((player) => {
+                    return player._id === this.state.user._id;
+                });
+                console.error("what is user: ", user)
+                
+                if (this.state.currentRoom.players.length === this.state.currentRoom.limit &&
+                    !user.ready) {
+                        console.error(user.name, " is trying")
+     
+                    updatePlayer(user._id, { ready: true }).then(res => {
+                        console.error(user.name, " is ready")
+                        this.socket.emit("playerIsReady", this.state.currentRoom);
+                    });
+    
+                }
+            });
+    
+        }
 }

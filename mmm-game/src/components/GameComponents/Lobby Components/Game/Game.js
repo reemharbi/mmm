@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import Investor from './InvestorView'
-import Card from './Card';
+import ProjectManager from './ProjectManagerView'
+import './Game.css'
+// import Card from './Card';
 import './Game.css';
 import Waiting from './Waiting';
-import Disconnetcted from './Disconnected';
-import { Button } from 'semantic-ui-react'
+import Disconnected from './Disconnected';
 
 export default class Game extends Component {
 
   state = {
-    currenyCard: null,
+    currentCard: null,
     currentComponent: 'waiting'
   }
 
@@ -24,10 +25,11 @@ export default class Game extends Component {
     this.props.socket.on("updateCurrentRoom", (roomID) => this.props.updateCurrentRoom(roomID));
 
     this.props.socket.on("startGame" , (card) => {
-      console.log("card: ", card,", players: ", this.props.room.players, " ,user: ", this.props.user._id)
-      const currentUser = this.props.room.players
-      console.log(currentUser);
-      console.log("current user in the game component" , currentUser)
+      const currentUser = this.props.room.players.find( (player) => {
+          return player._id == this.props.user._id
+      })
+      console.log("currentUser is:" , currentUser)
+ 
       if (currentUser.role == "inv"){
         this.setState({
           currentCard: card,
@@ -42,11 +44,8 @@ export default class Game extends Component {
         })
 
       }
-      
-
-    } )
-
-
+    
+    })
   }
 
 
@@ -59,25 +58,25 @@ export default class Game extends Component {
     if (this.state.currentComponent === 'investor') {
       return <div>
         <p>Current players in room: {this.props.room.players.length}</p>
-        <Investor exitGame={this.props.exitGame} cards={this.state.cards} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+        <Investor exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
       </div>
     }
     else if (this.state.currentComponent === 'project manager') {
       return <div>
-
+        <p>Current players in room: {this.props.room.players.length}</p>
+        <ProjectManager exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+     
       </div>
     }
 
     else if(this.state.currentComponent === 'waiting'){
       return <div>
-        <Waiting room={this.props.room}/>
-        <Button className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
-        
+        <Waiting exitGame={this.props.exitGame} room={this.props.room}/>
         </div>
 
     }
-    else if (this.state.currentComponent === 'disconnetcted player'){
-      return <Disconnetcted />
+    else if (this.state.currentComponent === 'disconnected player'){
+      return <Disconnected />
 
     }
   }

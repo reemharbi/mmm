@@ -6,10 +6,9 @@ export default class Room extends Component {
         // console.log(this.props.name)
         // console.log(this.props.playerCount)
         return (
+
             <div>
-
-
-<Card>
+<Card fluid>
       <Card.Content>
       
         <Card.Header>{this.props.name}</Card.Header>
@@ -19,7 +18,7 @@ export default class Room extends Component {
       <Card.Content extra>
         <div className='ui two buttons'>
           <Button color='blue' onClick={() => this.props.enterRoom(this.props.roomID)}>
-            Join
+            Join Room
           </Button>
         
         </div>
