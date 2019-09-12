@@ -136,11 +136,39 @@ exports.initGame = (sio, socket) => {
 
 
 
+
+  checkIfAllSumbited = (currentRoom)=>{
+    let counter = 0;
+    let players = [];
+    Room.findById(currentRoom._id).populate('players').exec((error, room) => {
+      room.players.forEach( player =>{
+        if (player.approach){
+          counter++;
+          players.push(player)
+        }
+      });
+      if (counter == 2){
+        io.to(currentRoom._id).emit("finalPhase" ,players);
+      }
+  }
+    )}
+
+
+  
+  sendWinner = (player ,room) => {
+    io.to(room._id).emit("gameResult" , player)
+
+  }
+
+
   gameSocket.on("disconnect", playerDisconnect);
   gameSocket.on('createNewRoom', createNewRoom);
   gameSocket.on('joinRoom', joinRoom);
   gameSocket.on("playerExitRoom", playerExitRoom);
-  gameSocket.on("playerIsReady", setGame)
+  gameSocket.on("playerIsReady", setGame);
+  gameSocket.on("submitApproach", checkIfAllSumbited);
+  gameSocket.on("gameWinner", sendWinner);
+  
 }
 
 

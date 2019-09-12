@@ -6,14 +6,19 @@ import './Game.css'
 import './Game.css';
 import Waiting from './Waiting';
 import Disconnected from './Disconnected';
+import InvestorFinalPhase from './InvestorFinalPhase';
+import ProjectManagerFinalView from './ProjectManagerFinalView';
+import { Button, Card, Grid, Image } from 'semantic-ui-react'
 
 export default class Game extends Component {
 
   state = {
     currentCard: null,
-    currentComponent: 'waiting'
+    currentComponent: 'waiting',
+    finalPhase: false,
+    playersInRoom: []
   }
-
+//
 
 
   
@@ -46,6 +51,16 @@ export default class Game extends Component {
       }
     
     })
+
+    this.props.socket.on("finalPhase" , (players) => {
+      this.setState({
+        playersInRoom: players,
+        finalPhase: true
+      })
+    })
+
+
+
   }
 
 
@@ -53,29 +68,64 @@ export default class Game extends Component {
 
 
     
+    if (this.state.finalPhase) {
+      
+  if (this.state.currentComponent === 'investor') {
+    return <div>
+              <Grid.Column>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+      </Grid.Column>
+    <InvestorFinalPhase room={this.props.room} socket={this.props.socket} players={this.state.playersInRoom} card={this.state.currentCard}/>
+  </div>
+  }
+  else{
+    return <div>
+              <Grid.Column>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+      </Grid.Column>
+       <ProjectManagerFinalView socket={this.props.socket} players={this.state.playersInRoom} card={this.state.currentCard}/>
+    </div>
+  }
 
 
-    if (this.state.currentComponent === 'investor') {
-      return <div>
-        <Investor user={this.props.user} exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+
+
+    }
+else {
+
+  if (this.state.currentComponent === 'investor') {
+    return <div>
+        <p>Current players in room: {this.props.room.players.length}</p>
+        <Grid.Column>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+      </Grid.Column>
+        <Investor exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
       </div>
     }
     else if (this.state.currentComponent === 'project manager') {
       return <div>
-        <ProjectManager user={this.props.user} exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />
+        <p>Current players in room: {this.props.room.players.length}</p>
+        <Grid.Column>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+      </Grid.Column>
+        <ProjectManager  exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} user={this.props.user}/>
      
       </div>
     }
-
+    
     else if(this.state.currentComponent === 'waiting'){
       return <div>
+        <Grid.Column>
+        <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
+      </Grid.Column>
         <Waiting exitGame={this.props.exitGame} room={this.props.room}/>
         </div>
 
-    }
-    else if (this.state.currentComponent === 'disconnected player'){
-      return <Disconnected />
-
-    }
-  }
+}
+else if (this.state.currentComponent === 'disconnected player'){
+  return <Disconnected />
+  
+}
+}
+}
 }

@@ -2,18 +2,38 @@ import React, { Component } from 'react'
 import { Button, Card, Grid, Image } from 'semantic-ui-react'
 import './InvestorView.css'
 import './AnimatedBG.css'
-import './Animations.css'
-import loading from './pencil.svg'
+import loading from './writing.svg'
 
+export default class InvestorFinalPhase extends Component {
 
-export default class InvestorView extends Component {
-    componentDidMount(){
-        this.props.socket.on("updateDB" , this.props.updateRoom(this.props.room._id) )
+    state = {
+        winner: ""
     }
+
+
+    chooseWinner(winner) {
+        this.props.socket.emit("gameWinner" , winner , this.props.room)
+
+    }
+
+
+
+    componentDidMount(){
+        this.props.socket.on("gameResult" , (winner) => {
+
+            this.setState({
+                winner: `The winner is ${winner.name}!!!`
+            })
+
+        })
+    }
+
+//
+
     render() {
-        const invName = this.props.room.players.find(player => player.role == 'inv').name
         return (
             <div>
+                <p>{this.state.winner}</p>
     <Grid columns={3}>
     <Grid.Row style={{paddingBottom: '0px'}}>
       <Grid.Column>
@@ -24,26 +44,25 @@ export default class InvestorView extends Component {
             </div>
       </Grid.Column>
       <Grid.Column>
-      <h3>{invName}</h3>
-      <h6>Investor</h6>
+      <Image centered style={{marginTop:'1rem'}} src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='tiny' circular />
       </Grid.Column>
-  
+      
     </Grid.Row>
-
+//
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px'}}>
         <Grid.Column>
             <div style={{height:'8vh'}}>
             </div>  
         </Grid.Column>
         <Grid.Column>
-            <p className='fade-in-fwd scale-out-center'>Investor</p>
+            <p className='fade-in-fwd scale-out-center'>Phase 1</p>
         </Grid.Column>
     </Grid.Row>
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>
         <Grid.Column>
-            <div>
-                <Card style={{paddingBottom: '0px'}} className="p1 project-card player-card">
-                <Image  centered src={loading} size='small' style={{background:'rgba(255,255,255,0)', marginTop:'5rem'}} />
+            <div onClick={(winner) => this.chooseWinner(this.props.players[1])}>
+                <Card style={{paddingBottom: '0px'}} className="project-card player-card">
+                <div>{this.props.players[1].approach}</div>
                 </Card>
             </div>
        </Grid.Column>
@@ -52,14 +71,17 @@ export default class InvestorView extends Component {
             </div>
        </Grid.Column>
        <Grid.Column>
-            <div>
+            <div onClick={(winner) => this.chooseWinner(this.props.players[0])}>
                 <Card style={{paddingBottom: '0px'}} className="project-card player-card p2">
-                <Image  centered src={loading} size='small' style={{background:'rgba(255,255,255,0)', marginTop:'5rem'}} />
+                
+                <div>{this.props.players[0].approach}</div>
                 </Card>
             </div>
        </Grid.Column>
+
     </Grid.Row>
-</Grid>
+
+        </Grid>
 
         <div class="bg"></div>
         <div class="bg bg2"></div>

@@ -14,7 +14,12 @@ const playerSchema = new mongoose.Schema({
     ready: {
         type: Boolean,
         default: false
+    },
+    approach: {
+        type: String,
+        default: ""
     }
+
 }, {
         timestamps: true
     });
