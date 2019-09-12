@@ -82,6 +82,10 @@ exports.initGame = (sio, socket) => {
     console.log("User is exited room");
     Player.findById(data.userID, (error, player) => {
       if (player) {
+        player.role = "";
+        player.approach = "";
+        player.ready = false;
+        player.save();
         Room.findOne({ players: player }, (error, room) => {
           if (room) {
             room.players.pull(userId);
@@ -93,6 +97,10 @@ exports.initGame = (sio, socket) => {
             // Call updateDb on all clients
             io.emit("updateDB", { for: "everyone" });
 
+            if(room.players.length == 0 ){
+              Room.find({_id: room._id}).remove().exec()
+              console.log("i am activated in the exit shit")
+            }
 
           }
         });
