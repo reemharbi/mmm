@@ -201,7 +201,6 @@ export default class Lobby extends Component {
             currentComponent: 'room',
             currentRoom: null
         })
-        console.log("hi, i'm exitRoom..nice to meet you", this.state.currentRoom)
     }
 
     roomsFilter = (e) => {
@@ -233,7 +232,33 @@ export default class Lobby extends Component {
             console.log(err)
         });
     }
-
+    
+    
+        updateCurrentRoom = (roomId) => {
+    
+            console.log("Update current room, for room: ", roomId)
+            getRoom(roomId).then(res => {
+                this.setState({
+                    currentRoom: res.data.room
+                });
+                const user = this.state.currentRoom.players.find((player) => {
+                    return player._id === this.state.user._id;
+                });
+                console.error("what is user: ", user)
+                
+                if (this.state.currentRoom.players.length === this.state.currentRoom.limit &&
+                    !user.ready) {
+                        console.error(user.name, " is trying")
+     
+                    updatePlayer(user._id, { ready: true }).then(res => {
+                        console.error(user.name, " is ready")
+                        this.socket.emit("playerIsReady", this.state.currentRoom);
+                    });
+    
+                }
+            });
+    
+        }
     render() {
 
         const username = this.state.user && this.state.user.name
@@ -274,30 +299,4 @@ export default class Lobby extends Component {
         // return <Waiting />
         // return <Disconnected />
     }
-    
-        updateCurrentRoom = (roomId) => {
-    
-            console.log("Update current room, for room: ", roomId)
-            getRoom(roomId).then(res => {
-                this.setState({
-                    currentRoom: res.data.room
-                });
-                const user = this.state.currentRoom.players.find((player) => {
-                    return player._id === this.state.user._id;
-                });
-                console.error("what is user: ", user)
-                
-                if (this.state.currentRoom.players.length === this.state.currentRoom.limit &&
-                    !user.ready) {
-                        console.error(user.name, " is trying")
-     
-                    updatePlayer(user._id, { ready: true }).then(res => {
-                        console.error(user.name, " is ready")
-                        this.socket.emit("playerIsReady", this.state.currentRoom);
-                    });
-    
-                }
-            });
-    
-        }
 }

@@ -93,6 +93,10 @@ exports.initGame = (sio, socket) => {
             // Call updateDb on all clients
             io.emit("updateDB", { for: "everyone" });
 
+            if(room.players.length == 0 ){
+              Room.find({_id: room._id}).remove().exec()
+              console.log("i am activated in the exit shit")
+            }
 
           }
         });
