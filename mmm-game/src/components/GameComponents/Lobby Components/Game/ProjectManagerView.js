@@ -1,16 +1,40 @@
 import React, { Component } from 'react'
-import { Button, Card, Grid, Image } from 'semantic-ui-react'
-import loading from './pencil.svg'
+import { Button, Card, Grid, Image, Form } from 'semantic-ui-react'
 import './ProjectManagerView.css'
-import './Animations.css'
+import loading from './writing.svg'
+import {updatePlayer} from '../api'
 
 export default class ProjectManagerView extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            currentCard: this.props.card
-        }
+    
+    state = {
+        approachField: "",
+        isSubmitted: false
     }
+
+    handleChange = (event) => {
+        this.setState({
+            approachField: event.target.value
+        })
+
+    }
+
+
+    approachSubmit = (value) => {
+        value.preventDefault();
+        const body = {approach: this.state.approachField};
+
+        updatePlayer(this.props.user._id , body).then( res => {
+            console.log("approach submit",res)
+            this.props.socket.emit("submitApproach" , this.props.room)
+        } );
+this.setState({isSubmitted:true})
+
+    }
+
+
+
+
+
     render() {
         // const invName = this.props.room.players.find(player => {
         //     console.error(player.role)
@@ -48,8 +72,16 @@ export default class ProjectManagerView extends Component {
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>
         <Grid.Column>
             <div>
-                <Card style={{paddingBottom: '0px'}} className="project-card player-card p1">
-                <Image  centered src={loading} size='small' style={{background:'rgba(255,255,255,0)', marginTop:'5rem'}} />
+                <Card style={{paddingBottom: '0px'}} className="project-card player-card">
+                {!this.state.isSubmitted &&
+                <Form> 
+                    <Form.TextArea value={this.state.approachField} onChange={(e) => this.handleChange(e)} placeholder='How would you approach this project?' />
+                    <Form.Button onClick={this.approachSubmit}>Submit</Form.Button>
+                </Form>
+            }
+                {this.state.isSubmitted && 
+                <div>{this.state.approachField}</div>
+                }
                 </Card>
             </div>
        </Grid.Column>

@@ -247,7 +247,7 @@ export default class Lobby extends Component {
             </div>)
         } else if (this.state.currentComponent === 'room') {
             return (
-                
+                //
                 <Container center>
                 {/* <div class="content"> */}
                 <div class="bg"></div>
