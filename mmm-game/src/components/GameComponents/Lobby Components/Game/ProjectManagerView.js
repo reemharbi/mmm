@@ -50,9 +50,7 @@ this.setState({isSubmitted:true})
       <Grid.Column>
       <Image centered style={{marginTop:'1rem'}} src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='tiny' circular />
       </Grid.Column>
-      <Grid.Column>
-        <Button floated='right' color='red' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
-      </Grid.Column>
+ 
     </Grid.Row>
 
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px'}}>
