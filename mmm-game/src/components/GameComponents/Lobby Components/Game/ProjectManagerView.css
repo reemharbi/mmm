@@ -8,21 +8,22 @@
     -webkit-box-shadow: -2px 15px 20px -9px rgba(0,0,0,0.75) !important;
     -moz-box-shadow: -2px 15px 20px -9px rgba(0,0,0,0.75) !important;
     box-shadow: -2px 15px 20px -9px rgba(0,0,0,0.75) !important;
-}
-
-
-.player-card {
-  height: 26.5rem;
-  max-width: 20rem !important;
-  background-color: #FFF785 !important;
-  margin-top: 0px !important;
   }
-
-.p1 {
+  
+  
+  .player-card {
+    height: 26.5rem;
+    max-width: 20rem !important;
+    background-color: #FFF785 !important;
+    margin-top: 0px !important;
+  }
+  
+  .p1 {
     left: 20rem !important;
   }
-
-.project-text {
+  
+  .project-text {
+    
     height: 8rem;
     font-size: 2.5rem;
     margin-top: 7rem;
@@ -35,3 +36,6 @@
   width: 10rem !important;
 }
 
+.sentence {
+
+}

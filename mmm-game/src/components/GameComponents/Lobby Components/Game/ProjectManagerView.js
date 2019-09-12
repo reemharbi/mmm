@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Card, Grid, Image, Form } from 'semantic-ui-react'
 import './ProjectManagerView.css'
-import loading from './writing.svg'
+import loading from './pencil.svg'
 import {updatePlayer} from '../api'
 
 export default class ProjectManagerView extends Component {
@@ -39,7 +39,6 @@ this.setState({isSubmitted:true})
         // const invName = this.props.room.players.find(player => {
         //     console.error(player.role)
         //      return player.role == 'inv'})
-        console.log(this.props.room.players)
         return (
             <div>
                   <Grid columns={3}>
@@ -66,7 +65,7 @@ this.setState({isSubmitted:true})
             </div>  
         </Grid.Column>
         <Grid.Column>
-            <p className='fade-in-fwd'>Project Manager</p>
+            <p className='fade-in-fwd sentence'>How would you approach this project?</p>
         </Grid.Column>
     </Grid.Row>
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>

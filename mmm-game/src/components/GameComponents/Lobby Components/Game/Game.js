@@ -95,8 +95,7 @@ else {
 
   if (this.state.currentComponent === 'investor') {
     return <div>
-        <p>Current players in room: {this.props.room.players.length}</p>
-        <Grid.Column>
+      <Grid.Column>
         <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
         <Investor exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} />

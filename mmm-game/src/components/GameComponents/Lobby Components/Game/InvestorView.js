@@ -19,7 +19,7 @@ export default class InvestorView extends Component {
       <Grid.Column>
             <div className='card-div'>
                 <Card className="project-card flip-vertical-right">
-                    <div className="project-text text-flip">{this.props.card.title}</div>
+                    <div className="project-text flip">{this.props.card.title}</div>
                 </Card>
             </div>
       </Grid.Column>
@@ -36,7 +36,7 @@ export default class InvestorView extends Component {
             </div>  
         </Grid.Column>
         <Grid.Column>
-            <p className='fade-in-fwd scale-out-center'>Investor</p>
+            <p className='fade-in-fwd sentence'>*playing solitaire while waiting for project proposals*</p>
         </Grid.Column>
     </Grid.Row>
     <Grid.Row style={{paddingBottom: '0px', paddingTop: '0px', height:'9vh'}}>
