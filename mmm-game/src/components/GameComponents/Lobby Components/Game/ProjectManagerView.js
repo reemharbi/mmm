@@ -36,10 +36,7 @@ this.setState({isSubmitted:true})
 
 
     render() {
-        // const invName = this.props.room.players.find(player => {
-        //     console.log (inv.name)
-        //      return player.role == 'inv'})
-        // console.log(this.props.room.players)
+       
         return (
             <div>
                   <Grid columns={3}>
@@ -52,7 +49,9 @@ this.setState({isSubmitted:true})
             </div>
       </Grid.Column>
       <Grid.Column>
-      {/* <h3>{invName.name}</h3> */}
+          {this.props.investor &&
+      <h3>{this.props.investor.name}</h3>
+          }
       <h6>Investor</h6>
      </Grid.Column>
       <Grid.Column>
