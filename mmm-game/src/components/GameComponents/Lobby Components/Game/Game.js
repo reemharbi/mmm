@@ -16,7 +16,8 @@ export default class Game extends Component {
     currentCard: null,
     currentComponent: 'waiting',
     finalPhase: false,
-    playersInRoom: []
+    playersInRoom: [],
+    investor: null
   }
 //
 
@@ -30,8 +31,18 @@ export default class Game extends Component {
     this.props.socket.on("updateCurrentRoom", (roomID) => this.props.updateCurrentRoom(roomID));
 
     this.props.socket.on("startGame" , (card) => {
-      const currentUser = this.props.room.players.find( (player) => {
-          return player._id == this.props.user._id
+      let currentUser = null;
+      this.props.room.players.forEach( (player) => {
+            if (player.role === 'inv'){
+              this.setState({
+                investor: player
+              })
+            }
+            console.log("the investor is :" , player , "???")
+          
+          if (player._id == this.props.user._id)
+          currentUser = player
+            
       })
       console.log("currentUser is:" , currentUser)
  
@@ -108,7 +119,7 @@ else {
         <Grid.Column>
         <Button floated='right' color='yellow' style={{color:'black', marginTop:'1rem', marginRight: '1rem'}} className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button>
       </Grid.Column>
-        <ProjectManager  exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} user={this.props.user}/>
+        <ProjectManager investor={this.state.investor} exitGame={this.props.exitGame} card={this.state.currentCard} room={this.props.room} updateRoom={this.props.updateRoom} socket={this.props.socket} user={this.props.user}/>
      
       </div>
     }
