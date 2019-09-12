@@ -82,6 +82,10 @@ exports.initGame = (sio, socket) => {
     console.log("User is exited room");
     Player.findById(data.userID, (error, player) => {
       if (player) {
+        player.role = "";
+        player.approach = "";
+        player.ready = false;
+        player.save();
         Room.findOne({ players: player }, (error, room) => {
           if (room) {
             room.players.pull(userId);
