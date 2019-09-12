@@ -12,9 +12,9 @@ export default class ProjectManagerView extends Component {
         }
     }
     render() {
-        const invName = this.props.room.players.find(player => {
-            console.log (inv.name)
-             return player.role == 'inv'})
+        // const invName = this.props.room.players.find(player => {
+        //     console.error(player.role)
+        //      return player.role == 'inv'})
         console.log(this.props.room.players)
         return (
             <div>
@@ -28,7 +28,7 @@ export default class ProjectManagerView extends Component {
             </div>
       </Grid.Column>
       <Grid.Column>
-      <h3>{invName.name}</h3>
+      {/* <h3>{invName.name}</h3> */}
       <h6>Investor</h6>
      </Grid.Column>
       <Grid.Column>
