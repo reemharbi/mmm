@@ -31,11 +31,14 @@
     color: white;
 }
 
+.p2 {
+  left: 500px !important;
+}
 
 .card-div {
   width: 10rem !important;
 }
 
 .sentence {
-
+font-size: 26px !important;
 }

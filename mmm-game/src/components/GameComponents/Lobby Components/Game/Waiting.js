@@ -9,12 +9,11 @@ export default class Waiting extends Component {
     render() {
       
         return (
-            <div>
+            <div style={{height:'90vh'}}>
             <div class="bg"></div>
             <div class="bg bg2"></div>
             <div class="bg bg3"></div>
             <div className="loading">
-            {/* <Button className="exit-button" onClick={this.props.exitGame}>EXIT GAME</Button> */}
         
     <p>Waiting for other players
         <Image src={dot} size='small' style={{marginLeft:'23rem'}} />

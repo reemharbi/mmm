@@ -3,8 +3,6 @@ import { Button, Card } from 'semantic-ui-react'
 
 export default class Room extends Component {
     render() {
-        // console.log(this.props.name)
-        // console.log(this.props.playerCount)
         return (
 
             <div>
@@ -23,10 +21,7 @@ export default class Room extends Component {
         
         </div>
       </Card.Content>
-    </Card>
-
-
-       
+    </Card>       
             </div>
         )
     }
