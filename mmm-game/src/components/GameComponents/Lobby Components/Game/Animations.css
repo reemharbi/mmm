@@ -3,7 +3,6 @@
 	        animation: flip-vertical-right 0.9s cubic-bezier(0.455, 0.030, 0.515, 0.955) 0.3s both;
 }
 
-
 .text-flip {
     -moz-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);

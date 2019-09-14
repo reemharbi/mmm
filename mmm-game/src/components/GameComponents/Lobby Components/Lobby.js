@@ -263,8 +263,6 @@ export default class Lobby extends Component {
 
         const username = this.state.user && this.state.user.name
         
-        console.log(this.state.user && this.state.user.name)
-        console.log(this.state.rooms)
         // now we're checking which component to display based on currentComponent from state
         if (this.state.currentComponent === 'user') {
             return (<div>

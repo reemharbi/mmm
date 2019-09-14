@@ -22,7 +22,12 @@
     left: 30rem !important;
   }
 
-.project-text {
+
+  .p2 {
+    left: 500px !important;
+  }
+
+  .project-text {
     height: 8rem;
     font-size: 2.5rem;
     margin-top: 7rem;
@@ -33,4 +38,17 @@
 
 .card-div {
   width: 10rem !important;
+}
+
+.sentence {
+font-size: 3rem !important;
+}
+
+.sentence-row {
+  padding: 0px !important;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child {
+  margin-top: 32px;
+  color: white;
 }
